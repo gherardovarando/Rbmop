@@ -48,15 +48,15 @@ void deboor_eval(double* t, int* k, int* knots_len, double* knots, int* ctr_len,
         else{
             aux = malloc(sizeof(double)* (*ctr_len));
             memcpy(aux,ctr,sizeof(double)*(*ctr_len));
-            for(j=0;j<( (*k) - multiplicity); j++){
-                for(i=idx-*k+j;i<(idx-multiplicity);i++){
-                    alpha = (*t-knots[i+1])/(knots[i+*k-j+1] - knots[i+1]);
-                    aux[i+1] = (1-alpha)*ctr[i]+alpha*ctr[i+1];
+            for(j=1;j<( (*k) - multiplicity+1); j++){
+                for(i=idx-*k+j;i<(idx-multiplicity+1);i++){
+                    alpha = (*t-knots[i])/(knots[i+*k-j] - knots[i]);
+                    aux[i] = (1-alpha)*ctr[i-1]+alpha*ctr[i];
                 }
                 memcpy(ctr,aux,sizeof(double)*(*ctr_len));
             }
             free(aux);
-            *retval = MAX_DBOR(ctr[idx-multiplicity],(*min));
+            *retval = MAX_DBOR(ctr[idx-multiplicity-1],(*min));
             return ;
         }
     }
@@ -76,7 +76,7 @@ inline void locate_and_multiplicity(int len, double* orderedVector, double value
         if(orderedVector[*pos]==value) (*multiplicity)++;
     }
     // Correct to point to the last position
-    (*pos)--;
+    (*pos);
 }
 
 
