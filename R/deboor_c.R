@@ -1,7 +1,4 @@
 
-#' @useDynLib Rbmop
-NULL
-
 
 
 
@@ -14,13 +11,14 @@ NULL
 #                                                           
 #############################################################
 #' @export
+#' @useDynLib Rbmop deboor_eval
 deboor_c <- function(t,k,knots,ctr,MIN=1E-10){
 
     l_knots <- length(knots)
     l_ctr <- length(ctr)
     
     res <- .C("deboor_eval",t = as.double(t),
-              k = as.double(k),
+              k = as.integer(k),
               knots_len = as.integer(l_knots),
               knots = as.double(knots),
               ctr_len = as.integer(l_ctr),

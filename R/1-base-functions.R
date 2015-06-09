@@ -129,7 +129,7 @@ evaluate.bmop<-function(x,object,MIN=bmopPar()$MIN){
    }
    if (d == 1) {
      dim(x)<-NULL
-     return(deboor(t = x,k = object$order,knots = object$knots[[1]],
+     return(deboor_c(t = x,k = object$order,knots = object$knots[[1]],
                    ctr = object$ctrpoints,MIN = MIN))
    }
    ctr<-rep(x = 0,times = dim(object$ctrpoints)[1])
@@ -144,7 +144,7 @@ evaluate.bmop<-function(x,object,MIN=bmopPar()$MIN){
      m$ctrpoints<-o
      ctr[i]<-evaluate.bmop(object=m,x=x[-1],MIN=MIN)  
    }
-   return(deboor(t=x[1],k = object$order[1],knots = object$knots[[1]],
+   return(deboor_c(t=x[1],k = object$order[1],knots = object$knots[[1]],
                  ctr =ctr ,MIN = MIN))
 }
 

@@ -1,6 +1,6 @@
 /************************************************************************
 *                                                                       *
-*       AUTHOR : LUIS RODRIGUEZ-LUJAN, GHERARDO VARANDO     *
+*       AUTHOR : GHERARDO VARANDO, LUIS RODRIGUEZ-LUJAN, DONALD DUCK    *
 *       AIM : Header of deboor_eval.c  					            *
 *       DATA : 30 APRIL 2015.                                           *
 *                                                                       *
@@ -49,14 +49,14 @@ void deboor_eval(double* t, int* k, int* knots_len, double* knots, int* ctr_len,
             aux = malloc(sizeof(double)* (*ctr_len));
             memcpy(aux,ctr,sizeof(double)*(*ctr_len));
             for(j=1;j<( (*k) - multiplicity+1); j++){
-                for(i=idx-*k+j;i<(idx-multiplicity+1);i++){
+                for(i=idx-*k+j+1;i<(idx-multiplicity+1);i++){
                     alpha = (*t-knots[i])/(knots[i+*k-j] - knots[i]);
                     aux[i] = (1-alpha)*ctr[i-1]+alpha*ctr[i];
                 }
                 memcpy(ctr,aux,sizeof(double)*(*ctr_len));
             }
             free(aux);
-            *retval = MAX_DBOR(ctr[idx-multiplicity-1],(*min));
+            *retval = MAX_DBOR(ctr[idx-multiplicity],(*min));
             return ;
         }
     }
