@@ -12,5 +12,5 @@ Imports: rgl,
          MASS,
          cubature,
          stats,
-    Rcpp
+          Rcpp
 LinkingTo: Rcpp

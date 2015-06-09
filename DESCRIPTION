@@ -11,6 +11,6 @@ Imports: rgl,
          RColorBrewer,
          MASS,
          cubature,
-         stats,
-    Rcpp
-LinkingTo: Rcpp
+         stats
+
+

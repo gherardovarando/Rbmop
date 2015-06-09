@@ -1,7 +1,7 @@
 /************************************************************************
 *                                                                       *
 *       AUTHOR : LUIS RODRIGUEZ-LUJAN, GHERARDO VARANDO     *
-*       AIM : Header of deboor_eval.c						            *
+*       AIM : Header of deboor_eval.c  					            *
 *       DATA : 30 APRIL 2015.                                           *
 *                                                                       *
 *************************************************************************/  
@@ -76,7 +76,5 @@ inline void locate_and_multiplicity(int len, double* orderedVector, double value
         if(orderedVector[*pos]==value) (*multiplicity)++;
     }
     // Correct to point to the last position
-    (*pos);
+    (*pos)--;
 }
-
-
