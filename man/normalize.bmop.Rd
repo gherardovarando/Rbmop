@@ -8,6 +8,8 @@ normalize.bmop(object, ...)
 }
 \arguments{
 \item{object}{a bmop object}
+
+\item{...}{additional parameters}
 }
 \value{
 a bmop object proportional to object,

@@ -10,6 +10,19 @@
 \arguments{
 \item{data}{\code{histogram} or \code{bins} object
 the variables must be in the right order}
+
+\item{conditional}{logic, if \code{TRUE} a conditional density is learned}
+
+\item{Min}{vector of lower bounds}
+
+\item{Max}{vector of upper bounds}
+
+\item{bmop}{a bmop object}
+
+\item{...}{see \code{bmopPar}}
+}
+\value{
+a bmop object
 }
 \description{
 Estimation of bmop density or conditional density

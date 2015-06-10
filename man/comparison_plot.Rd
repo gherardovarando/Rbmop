@@ -32,6 +32,11 @@ comparison_plot(bmop.list, dtrue = NULL, colors = NULL, lwd = 3,
 \code{"top"}, \code{"left"},
 \code{"topright"}, etc.}
 
+\item{file}{an optional file name to save the plot}
+
+\item{ylim}{parameter to set the plot correctly, set to NULL
+for automatic setting}
+
 \item{...}{more parameters to be passed to \code{dtrue}}
 }
 \value{

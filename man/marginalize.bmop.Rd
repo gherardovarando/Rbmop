@@ -11,6 +11,8 @@ marginalize.bmop(object, MARGIN = 1, ...)
 
 \item{MARGIN}{positive integer or vector of positive integer,
 the dimensions that has to be marginalized}
+
+\item{...}{additional parameters}
 }
 \value{
 a bmop object over a space of dimension \code{length(MARGIN)}

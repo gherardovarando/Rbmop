@@ -7,9 +7,9 @@
 \method{mean}{bmop}(x, ...)
 }
 \arguments{
-\item{...}{for compatibility with \code{\link{mean}}}
+\item{x}{a bmop object}
 
-\item{object}{a bmop object}
+\item{...}{for compatibility with \code{\link{mean}}}
 }
 \value{
 numeric value, the mean of the bmop density

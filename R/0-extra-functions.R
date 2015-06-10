@@ -72,5 +72,26 @@ fix_data<-function(data){
 }
 
 
+#' Create bins
+#' 
+#' @param data  data.frame or an object that will coerced to a data.frame.
+#' @param breaks an integer, a vector of integer or a function, similar to 
+#' \code{hist}.
+#' @return a \code{bins} class object.
+#' @export
+as.bins<-function(data,breaks=nclass.FD,...){
+  data<-as.data.frame(data)
+  if (is.function(breaks)){
+    Ns<-lapply(data,FUN = breaks)
+  }
+  else{
+    Ns<-rep(breaks,times = dim(data)[2])[1:(dim(data)[2])]
+    }
+  Seqs<-lapply(1:(dim(data)[2]),function(i){
+    return(pretty(x = data[,i],n = Ns[i]))
+  })
+  
+}
+
 
 

@@ -156,7 +156,7 @@ evaluate.bmop<-function(x,object,MIN=bmopPar()$MIN){
 #' Internal function
 #' @param bmop bmop object
 #' @param x numeric
-#' @param MIN numeric
+#' @param ... oprional parameters
 #' @return array with the values of the bspline basis corresponding to bmop
 delta<-function(bmop,x,...){
   d<-length(bmop$order)
@@ -453,7 +453,7 @@ logLik.bmop<-function(object,data,...){
     
   }
   ll<-evaluate.bmop(object = object,x=data,MIN=10^(-10))
-  ll<-sum(log(ll)**counts)
+  ll<-sum(log(ll)*counts)
   return(ll)
 }
 
@@ -532,7 +532,7 @@ upper.bmop<-function(object){
 
 #' Mean value for a bmop density
 #'
-#' @param object a bmop object
+#' @param x a bmop object
 #' @param ... for compatibility with \code{\link{mean}}
 #' @return numeric value, the mean of the bmop density
 #' @export

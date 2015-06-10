@@ -13,7 +13,7 @@ delta(bmop, x, ...)
 
 \item{x}{numeric}
 
-\item{MIN}{numeric}
+\item{...}{oprional parameters}
 }
 \value{
 array with the values of the bspline basis corresponding to bmop

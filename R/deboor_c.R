@@ -10,7 +10,6 @@
 #   Version: 0.1                                          
 #                                                           
 #############################################################
-#' @export
 #' @useDynLib Rbmop deboor_eval
 deboor_c <- function(t,k,knots,ctr,MIN=1E-10){
 

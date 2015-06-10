@@ -22,6 +22,7 @@ clean.bmop<-function(object){
 #' @param object a bmop object
 #' @param MARGIN  positive integer or vector of positive integer, 
 #' the dimensions that has to be marginalized 
+#' @param ... additional parameters
 #' @return a bmop object over a space of dimension \code{length(MARGIN)} 
 #' the result of integrating over the \code{-MARGIN}
 #' @export
@@ -46,6 +47,7 @@ marginalize.bmop<-function(object,MARGIN=1,...){
 #' 
 #' Normalize a bmop object, makes it integrate to one.
 #' @param object a bmop object
+#' @param ... additional parameters
 #' @return a bmop object proportional to object, 
 #' but such that integrates to one.
 #' @export
@@ -62,6 +64,12 @@ normalize.bmop<-function(object,...){
 #' 
 #' Normalize a bmop object, makes it integrate to one.
 #' @param object a bmop object
+#' @param evidence the value of evidence
+#' @param evd.pos the position of evidence
+#' @param MIN the MIN value as in \code{bmopPar}
+#' @param normalize logical, if \code{TRUE} the final bmop object will 
+#' be normalized (usually it is not needed since this function is applied to
+#' conditional densities)
 #' @return a bmop object, the result of imposing some evidence
 #' @export
 put_evidence.bmop<-function(object,evidence,evd.pos=NULL,
@@ -82,21 +90,3 @@ put_evidence.bmop<-function(object,evidence,evd.pos=NULL,
 
 
 
-#' Normalized Mutual Information (not working!!!)
-#' 
-nmi.bmop<-function(p,q){
-  l1<-p$knots[[1]][1]
-  u1<-max(p$knots[[1]])
-  l2<-q$knots[[1]][1]
-  u2<-max(q$knots[[1]])
-  H<-integrate(lower = l1,upper =u1 ,f=function(x){ 
-    t<-evaluate.bmop(x=x,object = p) 
-   return(t*log(t))} )$value
-  H2<-cubature::adaptIntegrate(lowerLimit = c(l2,l1),upperLimit = c(u2,u1), 
-                               f = function(x){
-    t<-evaluate.bmop(x = x[2],object = p)
-    s<-evaluate.bmop(x=x,object = q)
-    return(t*s*log(s))
-  })$integral
-  return((H-H2)/H)
-}

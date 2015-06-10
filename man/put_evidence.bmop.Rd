@@ -9,6 +9,16 @@ put_evidence.bmop(object, evidence, evd.pos = NULL, MIN = 0,
 }
 \arguments{
 \item{object}{a bmop object}
+
+\item{evidence}{the value of evidence}
+
+\item{evd.pos}{the position of evidence}
+
+\item{MIN}{the MIN value as in \code{bmopPar}}
+
+\item{normalize}{logical, if \code{TRUE} the final bmop object will
+be normalized (usually it is not needed since this function is applied to
+conditional densities)}
 }
 \value{
 a bmop object, the result of imposing some evidence

@@ -97,7 +97,6 @@ bmopPar<-function(...){
 }
 
 #' define bmop, internal function
-#'
 define_bmop<-function(bmop=NULL,data=NULL,Max=NULL,Min=NULL,
                       N=get(".bmopPars",
                             envir = .bmopenv)$N,
@@ -192,6 +191,12 @@ bmop_fit<-function(data,conditional=F,Min=NULL,Max=NULL,...){
 #'
 #'@param data data.frame, matrix or vector
 #'the variables must be in the right order (the columns of data)
+#' @param conditional logic, if \code{TRUE} a conditional density is learned
+#' @param Min vector of lower bounds
+#' @param Max vector of upper bounds
+ #' @param bmop  a bmop object
+#' @param ... see \code{bmopPar}
+#' @return a bmop object
 #'@export
 bmop_fit.data.frame<-function(data, conditional=F,
                               Min=NULL,
@@ -247,6 +252,12 @@ bmop_fit.data.frame<-function(data, conditional=F,
 #'
 #'@param data \code{histogram} or \code{bins} object
 #'the variables must be in the right order
+#' @param conditional logic, if \code{TRUE} a conditional density is learned
+#' @param Min vector of lower bounds
+#' @param Max vector of upper bounds
+#' @param bmop  a bmop object
+#' @param ... see \code{bmopPar}
+#' @return a bmop object
 #'@export
 bmop_fit.bins<-function(data, conditional=F,
                               Min=NULL,
@@ -304,6 +315,12 @@ bmop_fit.bins<-function(data, conditional=F,
 #'
 #'@param data \code{histogram} or \code{bins} object
 #'the variables must be in the right order
+#' @param conditional logic, if \code{TRUE} a conditional density is learned
+#' @param Min vector of lower bounds
+#' @param Max vector of upper bounds
+#' @param bmop  a bmop object
+#' @param ... see \code{bmopPar}
+#' @return a bmop object
 #'@export
 bmop_fit.histogram <- bmop_fit.bins
 

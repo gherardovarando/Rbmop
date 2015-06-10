@@ -70,6 +70,9 @@ compare.bmop<-function(object,dtrue,measure="MSE",method="grid",
 #' @param legend.pos string for the position of the legend 
 #' \code{"top"}, \code{"left"}, 
 #' \code{"topright"}, etc.
+#' @param file an optional file name to save the plot
+#' @param ylim parameter to set the plot correctly, set to NULL 
+#' for automatic setting
 #' @param ... more parameters to be passed to \code{dtrue}
 #' @return invisible() 
 #' @export
