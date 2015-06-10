@@ -44,10 +44,10 @@ compare.bmop<-function(object,dtrue,measure="MSE",method="grid",
   if (m=="MSE"){ 
     result$MSE<-(sum((evaluate.bmop(object = object,
                               x = data)-dtrue(data,...))^2)/
-             (N^length(object$order))) }
+             (dim(data)[1])) }
   if (m=="MAE"){ 
     result$MAE<-(sum(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...)))
-           /(N^length(object$order))) }
+           /(dim(data)[1]))) }
   if (m=="MAX"){ 
     result$MAX<-(max(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...)))) }
   }
