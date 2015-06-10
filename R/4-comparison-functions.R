@@ -47,7 +47,7 @@ compare.bmop<-function(object,dtrue,measure="MSE",method="grid",
              (dim(data)[1])) }
   if (m=="MAE"){ 
     result$MAE<-(sum(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...)))
-           /(dim(data)[1]))) }
+           /(dim(data)[1])) }
   if (m=="MAX"){ 
     result$MAX<-(max(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...)))) }
   }
