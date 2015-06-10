@@ -22,8 +22,8 @@ over some of its dimension.
 }
 \examples{
 data<-data.frame(rnorm(100),rnorm(100))
-bmop2d<-estimate_bmop(data)
-bmop1d<-estimate_bmop(data[,1])
+bmop2d<-bmop_fit(data)
+bmop1d<-bmop_fit(data[,1])
 bmop1dmargin<-marginalize.bmop(bmop2d,MARGIN=1)
 comparison_plot(list(bmop1d,bmop1dmargin),true=dnorm,
 names.bmop=c("direct est.","marginalized"))

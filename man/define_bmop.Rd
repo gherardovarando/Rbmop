@@ -7,7 +7,7 @@
 define_bmop(bmop = NULL, data = NULL, Max = NULL, Min = NULL,
   N = get(".bmopPars", envir = .bmopenv)$N, order = get(".bmopPars", envir =
   .bmopenv)$order, alpha = get(".bmopPars", envir = .bmopenv)$alpha,
-  method = get(".bmopPars", envir = .bmopenv)$knotsMethod)
+  method = get(".bmopPars", envir = .bmopenv)$knotsMethod, ...)
 }
 \description{
 define bmop, internal function

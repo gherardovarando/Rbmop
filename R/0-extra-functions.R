@@ -40,7 +40,7 @@ locate<-function(a,v){
 #' @examples
 #' sample1<-sampler_MH(100,1,dnorm)
 #' hist(sample1)
-#' plot(estimate_bmop(sample1))
+#' plot(bmop_fit(sample1))
 #' sample2<-sampler_MH(100,1,dnorm,max=0.5,min=-1)
 #' hist(sample2)
 sampler_MH<-function(N,d,densit,h=3,M=1000,xstart=NULL,max=+Inf,min=-Inf){
@@ -68,8 +68,9 @@ sampler_MH<-function(N,d,densit,h=3,M=1000,xstart=NULL,max=+Inf,min=-Inf){
 #' @return if \code{is.null(dim(data))} then the function set 
 #' \code{dim(data)<-c(length(data),1)} and return \code{data}.
 fix_data<-function(data){
-  if (is.null(dim(data))){
-    dim(data)<-c(length(data),1)
-  }
-  return(data)
+ return(as.data.frame(data))
 }
+
+
+
+

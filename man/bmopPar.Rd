@@ -2,7 +2,7 @@
 % Please edit documentation in R/2-estimation-functions.R
 \name{bmopPar}
 \alias{bmopPar}
-\title{Set fitting parameters}
+\title{Set Rbmop parameters}
 \usage{
 bmopPar(...)
 }
@@ -10,14 +10,53 @@ bmopPar(...)
 \item{...}{see details.}
 }
 \description{
-Set appropriate parameters to be used by fitting
-functions.
+Set appropriate global parameters to be used by \code{Rbmop}
+functions . This is the appropriate way to change those parameters.
+The use is similar to \code{par()} in package \code{graphics}.
 }
 \details{
-This function set parameters used for estimation.
-          \code{N}:  The number of knots in every dimensions.
-          \code{order}: The order of the B-spline in every dimensions.
-          \code{alpha}: The exponent to compute the number of knots.
-         \code{knotsMethod}: \code{"uniform"} or \code{"quantiles"} knots.
+This function set parameters used for estimation.The call \code{
+          bmopPar()} just print the values of the paramters.
+
+
+          \code{mle=FALSE}: logical. If use maximum-likelihood estimation of
+          bmop coefficient, setting \code{mle=TRUE} just force
+          \code{repMax=1}.
+
+          \code{N=3}:  The number of knots in every dimensions,
+          vector of positive integer, if needed values will be recycled.
+
+          \code{order=3}: The order of the B-spline in every dimensions,
+          vector of positive integer, if needed values will be recycled.
+
+          \code{alpha=3}: The penalization
+                        exponent to compute the number of knots.
+
+         \code{knotsMethod="uniform"}:
+          \code{"uniform"} or \code{"quantiles"} knots,
+          how knots are computed.
+
+          \code{k=2}: Coefficient of \code{AIC} (penalized likelihood),
+          positive integer or \code{"BIC"} string. This is used by
+          \code{search_bmop}.
+
+           \code{toll=10^{-10}}: Tollerance for the increment of the likelihood in
+                        the mle estimation of the coefficient.
+
+          \code{repMax=100}: maximum number of iteration in the mle
+                             estimation of the coefficient
+
+         \code{MIN=10^{-10}}: This is not a learning parameter but instead
+                              define the \code{MIN} parameter in the
+                              evaluation of bmop object. Observe that some
+                              functions like \code{logLik} or \code{plot},
+                              set this parameter independently.
+
+         \code{autoreduce=200}: This value set the maximum dimension of an
+                                accepted dataset as raw-data, for larger
+                                dataset, functions \code{bmop_fit} and
+                                \code{search_bmop} will be applied over the
+                                reduced bins (histograms). Setting it to
+                                \code{Inf} disable this features.
 }
 

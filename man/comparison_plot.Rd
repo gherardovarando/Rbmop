@@ -42,9 +42,10 @@ Plot several bmops and true density
 }
 \examples{
 data<-rnorm(200)
-bmopE<-estimate_bmop(data)
-bmopS<-search_bmop(data)
-comparison_plot(list(bmopE,bmopS),true=dnorm,
-                 names.bmop=c("Fast","AIC-search"))
+bmop1<-bmop_fit(data)
+bmopPar(mle=TRUE)
+bmop2<-bmop_fit(data)
+comparison_plot(list(bmop1,bmop2),true=dnorm,
+                 names.bmop=c("Fast","MLE"))
 }
 

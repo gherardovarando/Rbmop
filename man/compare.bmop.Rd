@@ -27,9 +27,10 @@ Compare bmop with true density
 }
 \examples{
 data<-rnorm(200)
-bmopE<-estimate_bmop(data)
-bmopS<-search_bmop(data)
-compare.bmop(bmopE,dtrue=dnorm)
-compare.bmop(bmopS,dtrue=dnorm,method="montecarlo")
+bmop1<-bmop_fit(data)
+bmopPar(mle=TRUE)
+bmop2<-bmop_fit(data)
+compare.bmop(bmop1,dtrue=dnorm)
+compare.bmop(bmop2,dtrue=dnorm,method="montecarlo")
 }
 

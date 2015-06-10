@@ -22,7 +22,7 @@ Numeric value (values) of the computed bspline at point
 Evaluation of a bmop object
 }
 \examples{
-bmop<-estimate_bmop(rnorm(100))
+bmop<-bmop_fit(rnorm(100))
 evaluate.bmop(0,bmop)
 evaluate.bmop(c(-1,0,+1),bmop)
 }

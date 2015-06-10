@@ -14,7 +14,7 @@ Integrate bmop object over the support
 }
 \examples{
 data<-rnorm(200)
-bmop<-estimate_bmop(data)
+bmop<-bmop_fit(data)
 integrate.bmop(bmop)
 }
 

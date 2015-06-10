@@ -16,7 +16,7 @@ Summary of a bmop object
 }
 \examples{
 data(trees)
-bmop<-estimate_bmop(data=trees$Height)
+bmop<-bmop_fit(data=trees$Height)
 summary(bmop)
 }
 

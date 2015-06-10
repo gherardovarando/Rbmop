@@ -17,7 +17,7 @@ logical, TRUE if "bmop" is present among class(object),
 Check if an object's class is bmop
 }
 \examples{
-bmop<-estimate_bmop(rexp(100))
+bmop<-bmop_fit(rexp(100))
 is.bmop(bmop)
 }
 

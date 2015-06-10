@@ -4,7 +4,7 @@
 \alias{envelope_plot}
 \title{Envelop of estimated bmop}
 \usage{
-envelope_plot(n = 100, N = 50, rtrue = rnorm, fun = estimate_bmop,
+envelope_plot(n = 100, N = 50, rtrue = rnorm, fun = bmop_fit,
   dtrue = dnorm, lwd = 3, type = "l", col.true = "red", ...)
 }
 \value{

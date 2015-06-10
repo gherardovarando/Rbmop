@@ -34,7 +34,7 @@ Metropolis-Hasting Sampler
 \examples{
 sample1<-sampler_MH(100,1,dnorm)
 hist(sample1)
-plot(estimate_bmop(sample1))
+plot(bmop_fit(sample1))
 sample2<-sampler_MH(100,1,dnorm,max=0.5,min=-1)
 hist(sample2)
 }

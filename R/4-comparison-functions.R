@@ -11,10 +11,11 @@
 #' @export
 #' @examples 
 #' data<-rnorm(200)
-#' bmopE<-estimate_bmop(data)
-#' bmopS<-search_bmop(data)
-#' compare.bmop(bmopE,dtrue=dnorm)
-#' compare.bmop(bmopS,dtrue=dnorm,method="montecarlo")
+#' bmop1<-bmop_fit(data)
+#' bmopPar(mle=TRUE)
+#' bmop2<-bmop_fit(data)
+#' compare.bmop(bmop1,dtrue=dnorm)
+#' compare.bmop(bmop2,dtrue=dnorm,method="montecarlo")
 compare.bmop<-function(object,dtrue,measure="MSE",method="grid",
                        densit=dtrue,N=100,...){
   
@@ -74,10 +75,11 @@ compare.bmop<-function(object,dtrue,measure="MSE",method="grid",
 #' @export
 #' @examples 
 #' data<-rnorm(200)
-#' bmopE<-estimate_bmop(data)
-#' bmopS<-search_bmop(data)
-#' comparison_plot(list(bmopE,bmopS),true=dnorm,
-#'                  names.bmop=c("Fast","AIC-search"))
+#' bmop1<-bmop_fit(data)
+#' bmopPar(mle=TRUE)
+#' bmop2<-bmop_fit(data)
+#' comparison_plot(list(bmop1,bmop2),true=dnorm,
+#'                  names.bmop=c("Fast","MLE"))
 comparison_plot<-function(bmop.list,dtrue=NULL,colors=NULL,lwd=3,type="l",
                           type.true="l",col.true="red",
                           names.bmop=1:length(bmop.list),legend.display=T,
@@ -141,7 +143,7 @@ invisible()
 #' @export
 #' @examples  
 #' envelope_plot(n=50,N=50,rtrue=rexp,dtrue=dexp)
-envelope_plot<-function(n=100,N=50,rtrue=rnorm,fun=estimate_bmop,
+envelope_plot<-function(n=100,N=50,rtrue=rnorm,fun=bmop_fit,
                         dtrue=dnorm,lwd=3,type="l",col.true="red",...){
   data.list<-lapply(rep(N,n),FUN = rtrue)
   bmop.list<-lapply(data.list,FUN=fun)

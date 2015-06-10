@@ -18,7 +18,7 @@ numeric value, the mean of the bmop density
 Mean value for a bmop density
 }
 \examples{
-bmop<-estimate_bmop(rnorm(100))
+bmop<-bmop_fit(rnorm(100))
 mean(bmop)
 }
 

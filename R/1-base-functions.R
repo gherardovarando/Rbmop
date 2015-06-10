@@ -38,6 +38,9 @@ new_bmop<-function(knots,order,ctrpoints = NULL,simple = TRUE,nk = FALSE){
   if (is.null(ctrpoints)) {
      ctrpoints<-array(0,dim =as.vector(sapply(nknots,FUN=length))-order)
   }
+  else{
+    ctrpoints<-array(ctrpoints,dim =as.vector(sapply(nknots,FUN=length))-order)
+  }
   
   mop<-list()
   mop[["order"]]<-order
@@ -54,7 +57,7 @@ new_bmop<-function(knots,order,ctrpoints = NULL,simple = TRUE,nk = FALSE){
 #'  FALSE otherwise
 #' @export
 #' @examples
-#' bmop<-estimate_bmop(rexp(100))
+#' bmop<-bmop_fit(rexp(100))
 #' is.bmop(bmop)
 is.bmop<-function(object){
   inherits(x = object,what = "bmop")
@@ -111,7 +114,7 @@ deboor<-function(t,k,knots,ctr,MIN=10^(-10)){
 #'         deBoor algorithm is used.
 #' @export
 #' @examples
-#' bmop<-estimate_bmop(rnorm(100))
+#' bmop<-bmop_fit(rnorm(100))
 #' evaluate.bmop(0,bmop)
 #' evaluate.bmop(c(-1,0,+1),bmop)
 evaluate.bmop<-function(x,object,MIN=bmopPar()$MIN){
@@ -267,7 +270,7 @@ plot.bmop<-function(x,N=1000,type="l",contour=TRUE,persp=FALSE,file=NULL,MIN=0,
 #' @export
 #' @examples 
 #' data(trees)
-#' bmop<-estimate_bmop(data=trees$Height)
+#' bmop<-bmop_fit(data=trees$Height)
 #' summary(bmop)
 summary.bmop<-function(object,...){
   summ<-list()
@@ -324,7 +327,7 @@ print.bmop<-function(x,...){
 #' @export
 #' @examples 
 #' data<-rnorm(200)
-#' bmopE<-estimate_bmop(data)
+#' bmopE<-bmop_fit(data)
 #' bmopS<-search_bmop(data)
 #' plot(bmopE)
 #' points(bmopS,type="l",col="red")
@@ -343,7 +346,7 @@ points.bmop<-function(x,N=100,...){
 #' @export
 #' @examples 
 #' data<-rnorm(200)
-#' bmop<-estimate_bmop(data)
+#' bmop<-bmop_fit(data)
 #' integrate.bmop(bmop)
 integrate.bmop<-function(object){
   return( sum(integration_constants(object)*object$ctrpoints))
@@ -362,15 +365,18 @@ integrate.bmop<-function(object){
 #' @export
 #' @examples 
 #' data<-rnorm(200)
-#' bmopE<-estimate_bmop(data)
+#' bmopE<-bmop_fit(data)
 #' bmopS<-search_bmop(data)
 #' plot(bmopE)
 #' points(bmopS,type="l",col="red")
 generate_knots<-function(data=NULL,N=5,method="uniform",Min=NULL,Max=NULL){
     
     D<-length(N)
+    if (inherits(data,"histogram")|inherits(data,"bins")){
+      data<-as.data.frame(data$mids)
+    }
     if (!is.null(data)){
-    data<-fix_data(data)
+    data<-as.data.frame(data)
     D<-dim(data)[2]
     if (length(N)!=D){ N<-rep(N,D)[1:D] }
     }
@@ -434,12 +440,20 @@ NULL
 #' @seealso AIC.bmop 
 #' @export
 logLik.bmop<-function(object,data,...){ 
-  N<-dim(data)[1]
-  if (is.null(N)){ 
-    N<-length(data)
-    dim(data)=c(N,1)}
+  if (inherits(data,"histogram")|inherits(data,"bins")){
+    counts<-data$counts
+    data<-data$mids
+
+    N<-sum(counts)
+  }
+  else{
+    data<-as.data.frame(data)
+    counts<-rep(1,dim(data)[1])
+    N<-dim(data)[1]
+    
+  }
   ll<-evaluate.bmop(object = object,x=data,MIN=10^(-10))
-  ll<-sum(log(ll))
+  ll<-sum(log(ll)**counts)
   return(ll)
 }
 
@@ -471,8 +485,13 @@ NULL
 AIC.bmop<-function(object,data,corrected=F,...,k = 2){
   a<-0
   d<-dim.bmop(x =object)
-  data<-fix_data(data)
-  if (corrected){ a<- 2*d*(d+1)/(dim(data)[1]-d-1) }
+  if (inherits(data,"histogram")|inherits(data,"bins")){
+    counts<-data$counts
+  }
+  else{
+    counts<-rep(1,dim(data)[1])
+  }
+  if (corrected){ a<- 2*d*(d+1)/(sum(counts)-d-1) }
   return(-2*logLik(object,data = data)+k*d+a)
 }
 
@@ -484,8 +503,13 @@ AIC.bmop<-function(object,data,corrected=F,...,k = 2){
 #' @param ... see \code{\link[stats]{BIC}}
 #' @export
 BIC.bmop<-function(object,data,corrected=F,...){
-  data<-fix_data(data)
-  return(AIC.bmop(object=object,data=data,k=log(dim(data)[1]),corrected=corrected))
+  if (inherits(data,"histogram")|inherits(data,"bins")){
+    N<-sum(data$counts)
+  }
+  else{
+    N<-dim(as.data.frame(data))[1]
+  }
+  return(AIC.bmop(object=object,data=data,k=log(N),corrected=corrected))
 }
 
 #' Lower Limit of bmop
@@ -513,7 +537,7 @@ upper.bmop<-function(object){
 #' @return numeric value, the mean of the bmop density
 #' @export
 #' @examples 
-#' bmop<-estimate_bmop(rnorm(100))
+#' bmop<-bmop_fit(rnorm(100))
 #' mean(bmop)
 mean.bmop<-function(x,...){
   object<-x
@@ -531,7 +555,7 @@ mean.bmop<-function(x,...){
 #' @param ... compatibility with \code{\link{as.function}}
 #' @export 
 #' @examples
-#' bmop<-estimate_bmop(rnorm(200))
+#' bmop<-bmop_fit(rnorm(200))
 #' fun<-as.function(bmop)
 #' fun(0)
 #' fun(3)

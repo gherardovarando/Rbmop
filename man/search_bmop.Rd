@@ -4,8 +4,8 @@
 \alias{search_bmop}
 \title{Greedy penalized log-likelihood search}
 \usage{
-search_bmop(data, k = Rbmop::bmopPar()$k, corrected = FALSE,
-  knotsMethod = Rbmop::bmopPar()$knotsMethod, ...)
+search_bmop(data, conditional = F, k = Rbmop::bmopPar()$k,
+  corrected = FALSE, knotsMethod = Rbmop::bmopPar()$knotsMethod, ...)
 }
 \arguments{
 \item{data}{data.frame, matrix or vector, the variables must be in
@@ -19,7 +19,7 @@ the right order (the columns of data)}
 A bmop object, the aproximations of \eqn{f}.
 }
 \description{
-Aproximation of a density \eqn{f(x_1,\ldots,x_n)}
+Aproximation of a density \eqn{f(x_1,\ldots,x_n)} or conditional density
 }
 \examples{
 require("MASS")

@@ -18,7 +18,7 @@ plot points from bmop
 }
 \examples{
 data<-rnorm(200)
-bmopE<-estimate_bmop(data)
+bmopE<-bmop_fit(data)
 bmopS<-search_bmop(data)
 plot(bmopE)
 points(bmopS,type="l",col="red")
