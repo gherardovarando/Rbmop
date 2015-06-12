@@ -3,22 +3,12 @@
 
 
 
-#' The numbers of occurency of an elemnent into a vector
-#'
-#' @param x value
-#' @param v vector
-#' @return numeric value giving the number of times an element appears into 
-#' the vector 
+
 multiplicity<-function(x,v){
   return(length(v[x==c(x,v)])-1)
 }
 
-#' Position of an element into a sorted vector
-#'
-#' @param a value
-#' @param v vector in ascending order (or it will be ordered)
-#' @return positive integer, the position i of the first element 
-#' of \eqn{v} (\eqn{v_i}) such that \eqn{v_i<=a<v_{i+1}} 
+
 locate<-function(a,v){
   v<-sort(c(a,v))
   return(max((1:(length(v)))[v==a]-1))
@@ -62,27 +52,18 @@ sampler_MH<-function(N,d,densit,h=3,M=1000,xstart=NULL,max=+Inf,min=-Inf){
 }
 
 
-#' Fix Data
-#'
-#' @param data, vector, array, data.frame, matrix
-#' @return if \code{is.null(dim(data))} then the function set 
-#' \code{dim(data)<-c(length(data),1)} and return \code{data}.
+
 fix_data<-function(data){
  return(as.data.frame(data))
 }
 
 
-#' Create bins
-#' 
-#' @param data  data.frame or an object that will coerced to a data.frame.
-#' @param breaks an integer, a vector of integer or a function, similar to 
-#' \code{hist}.
-#' @return a \code{bins} class object.
-#' @export
+
 as.bins<-function(data,breaks=nclass.FD,...){
+  bins<-list()
   data<-as.data.frame(data)
   if (is.function(breaks)){
-    Ns<-lapply(data,FUN = breaks)
+    Ns<-sapply(data,FUN = breaks)
   }
   else{
     Ns<-rep(breaks,times = dim(data)[2])[1:(dim(data)[2])]
@@ -90,6 +71,18 @@ as.bins<-function(data,breaks=nclass.FD,...){
   Seqs<-lapply(1:(dim(data)[2]),function(i){
     return(pretty(x = data[,i],n = Ns[i]))
   })
+  Mids<-lapply(Seqs,function(seq){
+    mids<-c()
+    for (i in 2:length(seq)){
+    mids<-c(mids,mean(seq[(i-1):i]))
+    }
+    return(mids)
+  })
+  bins$mids<-expand.grid(Mids)
+  bins$counts<-c()
+  for (i in 1:(dim(grid)[1])){
+    bins$counts[i]<-2
+  }
   
 }
 

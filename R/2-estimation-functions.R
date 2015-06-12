@@ -96,7 +96,7 @@ bmopPar<-function(...){
   lockBinding(sym = ".bmopPars",env = .bmopenv)
 }
 
-#' define bmop, internal function
+
 define_bmop<-function(bmop=NULL,data=NULL,Max=NULL,Min=NULL,
                       N=get(".bmopPars",
                             envir = .bmopenv)$N,

@@ -67,20 +67,7 @@ is.bmop<-function(object){
 
 
 
-#' DeBoor algorithm 
-#' as in 
-#' \url{http://cse.taylor.edu/~btoll/s99/424/res/ucdavis/CAGDNotes/
-#' Deboor-Cox-Calculation/Deboor-Cox-Calculation.html}
-#' knots 
-#' sequence must be of type \eqn{u_1=u_2=...=u_(k)<u_r<...<u_s<u_(k+1)=..=u_n}
-#'  see \code{\link{generate_knots}}
-#'
-#' @param t numeric
-#' @param k positive integer
-#' @param knots vector
-#' @param ctr vector
-#' @param MIN numeric
-#' @return numeric value of the computed bspline at point t
+
 deboor<-function(t,k,knots,ctr,MIN=10^(-10)){
    n<-length(knots)
    N<-length(ctr)
@@ -151,13 +138,7 @@ evaluate.bmop<-function(x,object,MIN=bmopPar()$MIN){
                  ctr =ctr ,MIN = MIN))
 }
 
-#' return an array with the B-spline basis computed over the points in \code{x}
-#' CHANGE ITTTTTT
-#' Internal function
-#' @param bmop bmop object
-#' @param x numeric
-#' @param ... oprional parameters
-#' @return array with the values of the bspline basis corresponding to bmop
+
 delta<-function(bmop,x,...){
   d<-length(bmop$order)
   c<-array(dim = dim(bmop$ctrpoints),1)
@@ -177,15 +158,7 @@ delta<-function(bmop,x,...){
   return(c)
 }
 
-#' Integral of the B-spline base
-#' 
-#' Compute the integrals of the bspline basis over all the domain.
-#' 
-#' @param bmop bmop object
-#' @param append.extra logical, if TRUE then the original bmop is returned, 
-#' with the integration constants in \code{bmop$extra$C}
-#' @return array of the values of the integrals of the bspline base
-#' @seealso integrate
+
 integration_constants<-function(bmop,append.extra=F){
   d<-length(bmop$order)
   dimm<-dim(bmop$ctrpoints)
@@ -285,8 +258,7 @@ summary.bmop<-function(object,...){
   return(summ)
 }
 
-#' print the summary of bmop
-#'
+
 #' @export 
 print.summary.bmop<-function(x,...){
  cat("B-MoP object \n")
