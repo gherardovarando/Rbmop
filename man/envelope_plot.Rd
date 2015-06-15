@@ -7,8 +7,11 @@
 envelope_plot(n = 100, N = 50, rtrue = rnorm, fun = bmop_fit,
   dtrue = dnorm, lwd = 3, type = "l", col.true = "red", ...)
 }
+\arguments{
+\item{n}{}
+}
 \value{
-invisible()
+\code{invisible() }
 }
 \description{
 This function plots various bmop estimations, from differents datasets.

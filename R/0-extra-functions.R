@@ -58,8 +58,8 @@ fix_data<-function(data){
 }
 
 
-#' as.bins
-#'@export
+#' bins
+#' @export
 as.bins<-function(data,breaks=nclass.FD,...){
   bins<-list()
   data<-as.data.frame(data)
@@ -81,6 +81,7 @@ as.bins<-function(data,breaks=nclass.FD,...){
   Seqs<-lapply(1:(dim(data)[2]),function(i){
     return(pretty(x = data[,i],n = Ns[i]))
   })
+  
   Mids<-lapply(Seqs,function(seq){
     mids<-c()
     for (i in 2:length(seq)){
@@ -88,14 +89,20 @@ as.bins<-function(data,breaks=nclass.FD,...){
     }
     return(mids)
   })
+  Ns<-sapply(Mids,length)
   bins$mids<-expand.grid(Mids)
   bins$counts<-c(rep(0,dim(bins$mids)[1]))
+  Es<-c()
+  Es[1]<-1
+  for (i in 2:(length(Ns))){
+    Es[i]<-Es[i-1]*Ns[i-1]
+  }
   for (i in 1:(dim(data)[1])){
     pos<-sapply(1:(dim(data)[2]),FUN = function(j){
       locate(data[i,j],Seqs[[j]])
     })
-    bins$counts[sum((pos)*(Ns)^(0:(length(pos)-1)))]<-
-      bins$counts[sum((pos)*(Ns)^(0:(length(pos)-1)))]+1
+    idx<-sum( (pos-1)*Es+1 )
+    bins$counts[idx] <- bins$counts[idx] + 1
   }
   idx<-bins$counts!=0
   bins$counts<-bins$counts[idx]

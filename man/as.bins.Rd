@@ -2,11 +2,11 @@
 % Please edit documentation in R/0-extra-functions.R
 \name{as.bins}
 \alias{as.bins}
-\title{as.bins}
+\title{bins}
 \usage{
 as.bins(data, breaks = nclass.FD, ...)
 }
 \description{
-as.bins
+bins
 }
 

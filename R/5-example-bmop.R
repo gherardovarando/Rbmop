@@ -28,7 +28,7 @@
 #' @name Examples_bmop
 #' @examples
 #' Ex<-ex_bmop_gaussian2Mixture()
-#' points(Ex$data,type="l",col="blue",lwd=3)
+#' points(density(Ex$data),type="l",col="blue",lwd=3)
 NULL
 #> NULL
 

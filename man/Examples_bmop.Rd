@@ -25,6 +25,8 @@ ex_bmop_gaussianBetaGamma(N = 1000, m1 = -3, m2 = 2, m3 = 3,
 \value{
 All the functions return an invisible list contating the
 generated dataset, the estimated bmops and the true density function.
+See example on how, for example, plot the default kernel density estimation
+on the same dataset.
 }
 \description{
 Various examples to show the capabilities of bmop estimations.
@@ -45,5 +47,9 @@ A comparative plot is then returned.
  and mean \code{m1}, a Beta density with \code{shape1=2 shape2=5 ncp=m2}  and
  a Gamma density with \code{shape=9 scale=m3/9}.}
  }
+}
+\examples{
+Ex<-ex_bmop_gaussian2Mixture()
+points(density(Ex$data),type="l",col="blue",lwd=3)
 }
 

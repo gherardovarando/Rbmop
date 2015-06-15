@@ -33,22 +33,30 @@ lockEnvironment(env = .bmopenv,bindings = ".bmopPars")
 #'           bmop coefficient, setting \code{mle=TRUE} just force 
 #'           \code{repMax=1}.
 #'            
-#'           \code{N=3}:  The number of knots in every dimensions, 
-#'           vector of positive integer, if needed values will be recycled.
+#'           \code{N=NA}: If present, the number of knots in every dimensions. 
+#'           Vector of positive integer, if needed values will be recycled.
 #'           
 #'           \code{order=3}: The order of the B-spline in every dimensions, 
 #'           vector of positive integer, if needed values will be recycled.
 #'           
 #'           \code{alpha=3}: The penalization 
-#'                         exponent to compute the number of knots.
+#'                         exponent to compute the number of knots. This is the
+#'                         default method to compute the number of knots, 
+#'                         with the formula: \eqn{ floor(n^(1/alpha))}, where 
+#'                         \eqn{n} is the number of observations in the 
+#'                         dataset.
+#'                         If \code{!is.na(N)} then the number of knots will be 
+#'                         set to \eqn{N^d} where \eqn{d} is the number of
+#'                          dimensions
+#'                         in the dataset (num. of variables).
 #'                         
 #'          \code{knotsMethod="uniform"}:
 #'           \code{"uniform"} or \code{"quantiles"} knots, 
-#'           how knots are computed. 
+#'           how knots are computed by \code{\link{generate_knots}}. 
 #'           
 #'           \code{k=2}: Coefficient of \code{AIC} (penalized likelihood), 
 #'           positive integer or \code{"BIC"} string. This is used by 
-#'           \code{search_bmop}.
+#'           \code{\link{search_bmop}}.
 #'           
 #'            \code{toll=10^{-10}}: Tollerance for the increment of the likelihood in
 #'                         the mle estimation of the coefficient.
@@ -59,14 +67,17 @@ lockEnvironment(env = .bmopenv,bindings = ".bmopPars")
 #'          \code{MIN=10^{-10}}: This is not a learning parameter but instead 
 #'                               define the \code{MIN} parameter in the 
 #'                               evaluation of bmop object. Observe that some 
-#'                               functions like \code{logLik} or \code{plot},
+#'                               functions like \code{\link{logLik}} or 
+#'                               \code{plot},
 #'                               set this parameter independently.
 #'                               
 #'          \code{autoReduce=200}: This value set the maximum dimension of an 
 #'                                 accepted dataset as raw-data, for larger
-#'                                 dataset, functions \code{bmop_fit} and 
-#'                                 \code{search_bmop} will be applied over the 
-#'                                 reduced bins (histograms). Setting it to 
+#'                                 dataset, functions \code{\link{bmop_fit}}
+#'                                  and 
+#'                                 \code{\link{search_bmop}}
+#'                                  will be applied over the 
+#'                                 reduced bins (histogram). Setting it to 
 #'                                 \code{Inf} disable this features.
 #'           @export
 bmopPar<-function(...){
@@ -149,7 +160,11 @@ define_bmop<-function(bmop=NULL,data=NULL,Max=NULL,Min=NULL,
 #' @param Min vector of lower bounds
 #' @param Max vector of upper bounds
 #' @param ... see \code{bmopPar}
-#' @return a bmop object
+#' @return a bmop object, a density if \code{conditional=FALSE} or a 
+#' conditional density if \code{conditional=TRUE}. In the latter case the first 
+#' variable of the dataset is considered asa de conditioned one and the rest of 
+#' the variables as the conditioning ones. If the dataset has only one variable 
+#' a normal density is generated discarding the value of \code{conditional}. 
 #' @export
 #' @examples
 #' plot(bmop_fit(rnorm(100)))

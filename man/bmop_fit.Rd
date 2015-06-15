@@ -19,7 +19,11 @@ bmop_fit(data, conditional = F, Min = NULL, Max = NULL, ...)
 \item{...}{see \code{bmopPar}}
 }
 \value{
-a bmop object
+a bmop object, a density if \code{conditional=FALSE} or a
+conditional density if \code{conditional=TRUE}. In the latter case the first
+variable of the dataset is considered asa de conditioned one and the rest of
+the variables as the conditioning ones. If the dataset has only one variable
+a normal density is generated discarding the value of \code{conditional}.
 }
 \description{
 Estimation of bmop density or conditional density

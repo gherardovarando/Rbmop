@@ -39,9 +39,21 @@ plot(condbmop,N=20,persp=TRUE)
 ## Trimodal-not differentiable density estimation via histogram
 f<-function(x){return( (dnorm(x,mean=6)+dnorm(x,mean=-3)+dgamma(x,shape=2))/3 )}
 D<-c(rnorm(10000,mean=-3),rgamma(10000,shape=2),rnorm(10000,mean=+6))
-bmopPar(mle=T)
+bmopPar(mle=TRUE)
 bmop<-bmop_fit(hist(D,nclass.FD))
 comparison_plot(bmop,f,ylim=NULL)
+
+########################
+## Using the examples functions
+
+Ex<-ex_bmop_gaussian2Mixture()
+points(density(Ex$data),type="l",col="blue",lwd=3)
+
+####
+
+Ex<-ex_bmop_gaussianBetaGamma(N = 10000,m1 = 8)
+points(density(Ex$data),type="l",col="blue",lwd=3)
+compare.bmop(Ex$bmop,Ex$true,c("MSE","MAE","MAX"))
 }
 \author{
 Gherardo Varando \email{gherardo.varando@gmail.com},

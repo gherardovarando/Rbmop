@@ -21,7 +21,8 @@ compare.bmop<-function(object,dtrue,measure="MSE",method="grid",
   
   if (method=="grid"){
     data<-expand.grid(lapply(object$knots,
-                             FUN = function(x){ return(min(x)+(0:N)*max(x)/N) 
+                             FUN = function(x){ return(min(x)+
+                                                         ((1:(N-1))*max(x)/N)) 
                                                 }))
     data<-as.matrix(data)
   }
@@ -46,10 +47,12 @@ compare.bmop<-function(object,dtrue,measure="MSE",method="grid",
                               x = data)-dtrue(data,...))^2)/
              (dim(data)[1])) }
   if (m=="MAE"){ 
-    result$MAE<-(sum(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...)))
+    result$MAE<-(sum(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...
+                                                                       )))
            /(dim(data)[1])) }
   if (m=="MAX"){ 
-    result$MAX<-(max(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...)))) }
+    result$MAX<-(max(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...
+    )))) }
   }
   return(result)
 } 
@@ -142,7 +145,8 @@ invisible()
 #' 
 #' This function plots various bmop estimations, from differents datasets.
 #'
-#' @return invisible() 
+#' @param n 
+#' @return \code{invisible() }
 #' @export
 #' @examples  
 #' envelope_plot(n=50,N=50,rtrue=rexp,dtrue=dexp)
