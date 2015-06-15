@@ -64,7 +64,7 @@ as.bins<-function(data,breaks=nclass.FD,...){
   bins<-list()
   data<-as.data.frame(data)
   if (dim(data)[2]==1){
-    H<-hist(data,breaks=breaks)
+    H<-hist(as.numeric(data),breaks=breaks)
     bins$mids<-H$mids
     bins$counts<-H$counts
     class(bins)<-"bins"
