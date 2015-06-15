@@ -52,7 +52,7 @@ This function set parameters used for estimation.The call \code{
                               functions like \code{logLik} or \code{plot},
                               set this parameter independently.
 
-         \code{autoreduce=200}: This value set the maximum dimension of an
+         \code{autoReduce=200}: This value set the maximum dimension of an
                                 accepted dataset as raw-data, for larger
                                 dataset, functions \code{bmop_fit} and
                                 \code{search_bmop} will be applied over the

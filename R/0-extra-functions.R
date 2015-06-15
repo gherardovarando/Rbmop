@@ -58,10 +58,18 @@ fix_data<-function(data){
 }
 
 
-
+#' as.bins
+#'@export
 as.bins<-function(data,breaks=nclass.FD,...){
   bins<-list()
   data<-as.data.frame(data)
+  if (dim(data)[2]==1){
+    H<-hist(data,breaks=breaks)
+    bins$mids<-H$mids
+    bins$counts<-H$counts
+    class(bins)<-"bins"
+    return(bins)
+  }
   if (is.function(breaks)){
     Ns<-sapply(data,FUN = breaks)
   }
@@ -79,10 +87,19 @@ as.bins<-function(data,breaks=nclass.FD,...){
     return(mids)
   })
   bins$mids<-expand.grid(Mids)
-  bins$counts<-c()
-  for (i in 1:(dim(grid)[1])){
-    bins$counts[i]<-2
+  bins$counts<-c(rep(0,dim(bins$mids)[1]))
+  for (i in 1:(dim(data)[1])){
+    pos<-sapply(1:(dim(data)[2]),FUN = function(j){
+      locate(data[i,j],Seqs[[j]])
+    })
+    bins$counts[sum((pos)*(Ns)^(0:(length(pos)-1)))]<-
+      bins$counts[sum((pos)*(Ns)^(0:(length(pos)-1)))]+1
   }
+  idx<-bins$counts!=0
+  bins$counts<-bins$counts[idx]
+  bins$mids<-bins$mids[idx,]
+  class(bins)<-"bins"
+  return(bins)
   
 }
 

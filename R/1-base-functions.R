@@ -1,4 +1,10 @@
 
+
+
+
+
+
+
 #' New bmop object
 #'
 #' Constructor of bmop object.
@@ -67,27 +73,27 @@ is.bmop<-function(object){
 
 
 
-
-deboor<-function(t,k,knots,ctr,MIN=10^(-10)){
-   n<-length(knots)
-   N<-length(ctr)
-   if ((t < knots[1]) | (t > knots[n])) { return(MIN)}
-   if (t == knots[n]) {return(max(MIN,ctr[N])) }
-   if (t == knots[1]) {return(max(MIN,ctr[1]))}
-   l<-locate(t,knots)
-   if (k == 1) { return(ctr[l])}
-   s<-multiplicity(t,knots)
-   ctrnew<-ctr
-   for (j in 1:(k-s)){
-      for (i in (l-k+j):(l-s)){
-        alpha<-(t-knots[i+1])/(knots[i+k-j+1]-knots[i+1])
-        ctrnew[i+1]<-(1-alpha)*ctr[i]+alpha*ctr[i+1]
-      }
-     ctr<-ctrnew
-   }
-   if (is.na(ctr[l-s])){ return(MIN)}
-   return(max(MIN,ctr[l-s]))
-}
+# 
+# deboor<-function(t,k,knots,ctr,MIN=10^(-10)){
+#    n<-length(knots)
+#    N<-length(ctr)
+#    if ((t < knots[1]) | (t > knots[n])) { return(MIN)}
+#    if (t == knots[n]) {return(max(MIN,ctr[N])) }
+#    if (t == knots[1]) {return(max(MIN,ctr[1]))}
+#    l<-locate(t,knots)
+#    if (k == 1) { return(ctr[l])}
+#    s<-multiplicity(t,knots)
+#    ctrnew<-ctr
+#    for (j in 1:(k-s)){
+#       for (i in (l-k+j):(l-s)){
+#         alpha<-(t-knots[i+1])/(knots[i+k-j+1]-knots[i+1])
+#         ctrnew[i+1]<-(1-alpha)*ctr[i]+alpha*ctr[i+1]
+#       }
+#      ctr<-ctrnew
+#    }
+#    if (is.na(ctr[l-s])){ return(MIN)}
+#    return(max(MIN,ctr[l-s]))
+# }
 
 
 

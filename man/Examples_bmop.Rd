@@ -22,6 +22,10 @@ ex_bmop_gaussianBetaGamma(N = 1000, m1 = -3, m2 = 2, m3 = 3,
 
 \item{lambda}{mixing coefficient, vector or double}
 }
+\value{
+All the functions return an invisible list contating the
+generated dataset, the estimated bmops and the true density function.
+}
 \description{
 Various examples to show the capabilities of bmop estimations.
 }

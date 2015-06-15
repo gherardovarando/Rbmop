@@ -12,7 +12,7 @@ assign(x = ".bmopPars",value = list(mle = FALSE,
                                     toll=10^(-10),
                                     repMax=100,
                                     MIN=10^(-10),
-                                    autoreduce=200),
+                                    autoReduce=200),
        envir = .bmopenv)
 lockEnvironment(env = .bmopenv,bindings = ".bmopPars")
 
@@ -62,7 +62,7 @@ lockEnvironment(env = .bmopenv,bindings = ".bmopPars")
 #'                               functions like \code{logLik} or \code{plot},
 #'                               set this parameter independently.
 #'                               
-#'          \code{autoreduce=200}: This value set the maximum dimension of an 
+#'          \code{autoReduce=200}: This value set the maximum dimension of an 
 #'                                 accepted dataset as raw-data, for larger
 #'                                 dataset, functions \code{bmop_fit} and 
 #'                                 \code{search_bmop} will be applied over the 
@@ -203,6 +203,15 @@ bmop_fit.data.frame<-function(data, conditional=F,
                               Max=NULL,
                               bmop=NULL,
                               ... ){
+  data<-as.data.frame(data)
+  if (dim(data)[1]>bmopPar()$autoReduce){
+    warning("Data dimension exced bmopPar()$autoreduce parameter. 
+            The data is grouped into bins. Modifying bmopPar()autoreduce 
+            to a greater value prevent that behaviour. See the help for more
+            informations.")
+    return(bmop_fit.bins(data = as.bins(data = data),conditional = conditional,
+                          Min=Min,Max=Max,bmop=bmop,...))
+  }
   m<-define_bmop(bmop = bmop,data = data,Max = Max,Min = Min,...)
   m<-normalize.bmop(m)
   d<-length(m$order) 
@@ -269,13 +278,13 @@ bmop_fit.bins<-function(data, conditional=F,
   d<-length(m$order) 
   C<-integration_constants(m)
   counts<-data$counts
-  D<-data
+  DD<-data
   data<-as.data.frame(data$mids)
   N<-sum(counts)
   D<-apply(data,MARGIN = 1,FUN = delta,bmop=m,MIN=10^(-10)) 
   dim(D)<-c(dim(m$ctrpoints),dim(data)[1])
   E<-slice.index(D,MARGIN = length(dim(D)))
-  m$logLik<-logLik.bmop(object=m,data=D)
+  m$logLik<-logLik.bmop(object=m,data=data)
   
   if (!bmopPar()$mle){ repmax <- 1}
   else{
@@ -301,7 +310,7 @@ bmop_fit.bins<-function(data, conditional=F,
       KK<- N*C
     }
     mnew$ctrpoints<- mnew$ctrpoints/ KK
-    mnew$logLik<-logLik.bmop(object = mnew,data = D)
+    mnew$logLik<-logLik.bmop(object = mnew,data = DD)
     if ((mnew$logLik-m$logLik)<bmopPar()$toll){
       break 
     }

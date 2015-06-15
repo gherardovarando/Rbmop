@@ -77,8 +77,9 @@ ex_bmop_gaussianBetaGamma<-function(N=1000,m1=-3,m2=2,m3=3,lambda=c(1,1,1)){
               dbeta(x,,shape1=2,shape2=5,ncp=m2)*(lambda[2])+
               dgamma(x,shape=3,scale = m3/3)*(lambda[3])))
   }
-  bmop<-bmop_fit(hist(D,nclass.FD))
-  bmopS<-search_bmop(hist(D,nclass.FD))
+
+  bmop<-bmop_fit(D)
+  bmopS<-search_bmop(D)
   comparison_plot(list(bmop,bmopS),f,names.bmop = c("Bmop-Estimation","AIC-Search"),
                   ylim=NULL)
   return(invisible(list(data=D,true=f,bmop=bmop,bmopS=bmopS)))
