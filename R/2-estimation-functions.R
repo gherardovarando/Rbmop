@@ -129,7 +129,7 @@ define_bmop<-function(bmop=NULL,data=NULL,Max=NULL,Min=NULL,
   if (is.null(data)){ 
     return(
       new_bmop(ctrpoints = 1,
-               knots = generate_knots(data = data,N = N,Max = Max,Min = Min),
+               knots = generate_knots(data = data,N = min(1,N),Max = Max,Min = Min),
                order = order))}
   if (inherits(data,what = "histogram")|inherits(data,what = "bins")){
     counts <- data$counts
@@ -141,7 +141,7 @@ define_bmop<-function(bmop=NULL,data=NULL,Max=NULL,Min=NULL,
   data<-as.data.frame(data)
   }
   if (is.na(N[1])){
-    N<-floor(dim(data)[1] ^ (1 / (dim(data)[2]*alpha)))
+    N<-min(1,floor(dim(data)[1] ^ (1 / (dim(data)[2]*alpha))))
     if (length(order)!=dim(data)[2]){ 
       order<-rep(order,dim(data)[2])[1:(dim(data)[2])]}
   }
