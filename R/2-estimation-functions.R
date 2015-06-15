@@ -225,10 +225,10 @@ bmop_fit.data.frame<-function(data, conditional=F,
             to a greater value prevent that behaviour. See the help for more
             informations.")
     if (conditional){
-      breaks<-max(1,floor(nclass.FD(data[,1])^{1/(dim(data[2]))}) )
+      breaks<-max(1,floor(nclass.FD(data[,1])^{1/(dim(data)[2])}) )
     }
     else{
-      breaks<-max(1, floor(max(sapply(data,nclass.FD))^{1/(dim(data[2]))}) )
+      breaks<-max(1, floor(max(sapply(data,nclass.FD))^{1/(dim(data)[2])} ))
     }
     return(bmop_fit.bins(data = as.bins(data = data,breaks = breaks),
                                         conditional=conditional,...))
