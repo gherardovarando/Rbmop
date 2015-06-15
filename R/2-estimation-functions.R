@@ -224,8 +224,14 @@ bmop_fit.data.frame<-function(data, conditional=F,
             The data is grouped into bins. Modifying bmopPar()autoreduce 
             to a greater value prevent that behaviour. See the help for more
             informations.")
-    return(bmop_fit.bins(data = as.bins(data = data),conditional = conditional,
-                          Min=Min,Max=Max,bmop=bmop,...))
+    if (conditional){
+      breaks<-max(1,floor(nclass.FD(data[,1])^{1/(dim(data[2]))}) )
+    }
+    else{
+      breaks<-max(1, floor(max(sapply(data,nclass.FD))^{1/(dim(data[2]))}) )
+    }
+    return(bmop_fit.bins(data = as.bins(data = data,breaks = breaks),
+                                        conditional=conditional,...))
   }
   m<-define_bmop(bmop = bmop,data = data,Max = Max,Min = Min,...)
   m<-normalize.bmop(m)
