@@ -7,6 +7,8 @@
 #' @param lambda mixing coefficient, vector or double
 #' @return All the functions return an invisible list contating the 
 #' generated dataset, the estimated bmops and the true density function.
+#' See example on how, for example, plot the default kernel density estimation
+#' on the same dataset.
 #' @details 
 #' This functions generate datasets of \code{N} observations.
 #' The function \code{bmop_fit} is then used to estimate the density.
@@ -24,6 +26,9 @@
 #'  a Gamma density with \code{shape=9 scale=m3/9}.}
 #'  }
 #' @name Examples_bmop
+#' @examples
+#' Ex<-ex_bmop_gaussian2Mixture()
+#' points(Ex$data,type="l",col="blue",lwd=3)
 NULL
 #> NULL
 
@@ -39,7 +44,7 @@ ex_bmop_gaussian2Mixture<-function(N=1000,m1=-3,m2=0,lambda=0.5){
   }
   bmop<-bmop_fit(D)
   bmopS<-search_bmop(D)
-  comparison_plot(list(bmop,bmopS),f,names.bmop = c("Bmop-Estimation"),
+  comparison_plot(list(bmop,bmopS),f,names.bmop = c("bmop_fit","search_bmop"),
                   ylim=NULL)
   return(invisible(list(data=D,true=f,bmop=bmop,bmopS=bmopS)))
 }
@@ -58,7 +63,7 @@ ex_bmop_gaussian3Mixture<-function(N=1000,m1=-3,m2=0,m3=+3,lambda=c(1,1,1)){
   }
   bmop<-bmop_fit(D)
   bmopS<-search_bmop(D)
-  comparison_plot(list(bmop,bmopS),f,names.bmop = c("Bmop-Estimation","AIC-Search"),
+  comparison_plot(list(bmop,bmopS),f,names.bmop = c("bmop_fit","search_bmop"),
                   ylim=NULL)
   return(invisible(list(data=D,true=f,bmop=bmop,bmopS=bmopS)))
 }
@@ -80,7 +85,7 @@ ex_bmop_gaussianBetaGamma<-function(N=1000,m1=-3,m2=2,m3=3,lambda=c(1,1,1)){
 
   bmop<-bmop_fit(D)
   bmopS<-search_bmop(D)
-  comparison_plot(list(bmop,bmopS),f,names.bmop = c("Bmop-Estimation","AIC-Search"),
+  comparison_plot(list(bmop,bmopS),f,names.bmop = c("bmop_fit","search_bmop"),
                   ylim=NULL)
   return(invisible(list(data=D,true=f,bmop=bmop,bmopS=bmopS)))
   
