@@ -496,7 +496,7 @@ BIC.bmop<-function(object,data,corrected=F,...){
 #'@return numeric value
 #'@export
 lower.bmop<-function(object){
-  return(min(object$knots[[1]]))
+  return(sapply(object$knots,min))
 }
 
 #' Upper Limit of bmop
@@ -505,7 +505,7 @@ lower.bmop<-function(object){
 #'@return numeric value
 #'@export
 upper.bmop<-function(object){
-  return(max(object$knots[[1]]))
+  return(sapply(object$knots,max))
 }
 
 #' Mean value for a bmop density
@@ -540,5 +540,5 @@ mean.bmop<-function(x,...){
 #' plot(fun,from=-2,to=+2)
 as.function.bmop<-function(x,MIN=0,...){
   bmop<-x
-  return(function(x,...){return(evaluate.bmop(x = x,object = bmop ))})
+  return(function(x,...){return(evaluate.bmop(x = x,object = bmop,MIN = MIN ))})
 }

@@ -220,9 +220,10 @@ bmop_fit.data.frame<-function(data, conditional=F,
                               ... ){
   data<-as.data.frame(data)
   if (dim(data)[1]>bmopPar()$autoReduce){
-    warning("Data dimension exced bmopPar()$autoreduce parameter. 
-            The data is grouped into bins. Modifying bmopPar()autoreduce 
-            to a greater value prevent that behaviour. See the help for more
+    warning("Data dimension exceded bmopPar()$autoreduce parameter. 
+            The data is grouped into bins. Modifying bmopPar()autoReduce 
+            to a greater value (or Inf) prevent that behaviour.
+            See the help for more
             informations.")
     if (conditional){
       breaks<-max(1,floor(nclass.FD(data[,1])^{1/(dim(data)[2])}) )

@@ -4,8 +4,7 @@
 \alias{compare.bmop}
 \title{Compare bmop with true density}
 \usage{
-compare.bmop(object, dtrue, measure = "MSE", method = "grid",
-  densit = dtrue, N = 100, ...)
+compare.bmop(object, dtrue, measure = "MSE", ...)
 }
 \arguments{
 \item{object}{bmop object}
@@ -13,12 +12,6 @@ compare.bmop(object, dtrue, measure = "MSE", method = "grid",
 \item{dtrue}{function}
 
 \item{measure}{string, \code{"MSE"}, \code{"MAE"}, \code{"MAX"}}
-
-\item{method}{string, \code{"grid"} or \code{"montecarlo"}}
-
-\item{densit}{function or string \code{"uniform"}}
-
-\item{N}{positive integer, number of points of comparison}
 
 \item{...}{optional arguments to be passed to \code{dtrue}}
 }

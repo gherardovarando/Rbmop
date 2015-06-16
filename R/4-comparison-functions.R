@@ -4,9 +4,6 @@
 #' @param object bmop object
 #' @param dtrue function
 #' @param measure string, \code{"MSE"}, \code{"MAE"}, \code{"MAX"}
-#' @param method string, \code{"grid"} or \code{"montecarlo"}
-#' @param densit function or string \code{"uniform"}
-#' @param N positive integer, number of points of comparison
 #' @param ... optional arguments to be passed to \code{dtrue}
 #' @export
 #' @examples 
@@ -16,44 +13,11 @@
 #' bmop2<-bmop_fit(data)
 #' compare.bmop(bmop1,dtrue=dnorm)
 #' compare.bmop(bmop2,dtrue=dnorm,method="montecarlo")
-compare.bmop<-function(object,dtrue,measure="MSE",method="grid",
-                       densit=dtrue,N=100,...){
-  
-  if (method=="grid"){
-    data<-expand.grid(lapply(object$knots,
-                             FUN = function(x){ return(min(x)+
-                                                         ((1:(N-1))*max(x)/N)) 
-                                                }))
-    data<-as.matrix(data)
-  }
-  if (method=="montecarlo"){
-    if (is.character(densit)){ 
-      if (densit=="uniform"){ 
-        densit<-function(x){ 
-          if (all(x<sapply(object$knots,FUN = max)) && 
-                all(x>sapply(object$knots,FUN=min)) ){
-          return(1) } 
-          else { return(0)} 
-        } 
-      } 
-    }
-    data<-sampler_MH(N = N^length(object$order),
-                     d = length(object$order),densit = densit,h = 3,M = 1000)
-  }
-  result<-list()
-  for (m in measure){
-  if (m=="MSE"){ 
-    result$MSE<-(sum((evaluate.bmop(object = object,
-                              x = data)-dtrue(data,...))^2)/
-             (dim(data)[1])) }
-  if (m=="MAE"){ 
-    result$MAE<-(sum(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...
-                                                                       )))
-           /(dim(data)[1])) }
-  if (m=="MAX"){ 
-    result$MAX<-(max(abs(evaluate.bmop(object = object,x = data)-dtrue(data,...
-    )))) }
-  }
+compare.bmop<-function(object,dtrue,measure="MSE",...){
+  f<-as.function(object)
+  ff<-function(x){ (f(x)-dtrue(x,...))^2}
+  result<-cubature::adaptIntegrate(f = ff,lowerLimit = lower.bmop(object),
+                         upperLimit = upper.bmop(object))$integral
   return(result)
 } 
 

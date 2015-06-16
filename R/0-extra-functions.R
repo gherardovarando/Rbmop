@@ -77,7 +77,7 @@ as.bins<-function(data,breaks=nclass.FD,...){
   }
   else{
     Ns<-rep(breaks,times = dim(data)[2])[1:(dim(data)[2])]
-    }
+  }
   Seqs<-lapply(1:(dim(data)[2]),function(i){
     return(pretty(x = data[,i],n = Ns[i]))
   })
@@ -85,7 +85,7 @@ as.bins<-function(data,breaks=nclass.FD,...){
   Mids<-lapply(Seqs,function(seq){
     mids<-c()
     for (i in 2:length(seq)){
-    mids<-c(mids,mean(seq[(i-1):i]))
+      mids<-c(mids,mean(seq[(i-1):i]))
     }
     return(mids)
   })
@@ -101,7 +101,9 @@ as.bins<-function(data,breaks=nclass.FD,...){
     pos<-sapply(1:(dim(data)[2]),FUN = function(j){
       locate(data[i,j],Seqs[[j]])
     })
-    idx<-sum( (pos-1)*Es+1 )
+    pos<-pos-1
+    pos[1]<-pos[1]+1
+    idx<-sum( (pos)*Es )
     bins$counts[idx] <- bins$counts[idx] + 1
   }
   idx<-bins$counts!=0
