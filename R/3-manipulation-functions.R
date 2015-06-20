@@ -24,7 +24,7 @@ clean.bmop<-function(object){
 #' the dimensions that has to be marginalized 
 #' @param ... additional parameters
 #' @return a bmop object over a space of dimension \code{length(MARGIN)} 
-#' the result of integrating over the \code{-MARGIN}
+#' the result of integrating over the \code{-MARGIN} other dimensions.
 #' @export
 #' @examples
 #' data<-data.frame(rnorm(100),rnorm(100))
@@ -62,7 +62,7 @@ normalize.bmop<-function(object,...){
 
 #' Put evidence on a conditional bmop
 #' 
-#' Normalize a bmop object, makes it integrate to one.
+#' Instantiate evidence on a bmop conditional density.
 #' @param object a bmop object
 #' @param evidence the value of evidence
 #' @param evd.pos the position of evidence
@@ -70,6 +70,7 @@ normalize.bmop<-function(object,...){
 #' @param normalize logical, if \code{TRUE} the final bmop object will 
 #' be normalized (usually it is not needed since this function is applied to
 #' conditional densities)
+#' @param ... additional parameters
 #' @return a bmop object, the result of imposing some evidence
 #' @export
 put_evidence.bmop<-function(object,evidence,evd.pos=NULL,

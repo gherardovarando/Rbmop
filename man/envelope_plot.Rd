@@ -8,7 +8,24 @@ envelope_plot(n = 100, N = 50, rtrue = rnorm, fun = bmop_fit,
   dtrue = dnorm, lwd = 3, type = "l", col.true = "red", ...)
 }
 \arguments{
-\item{n}{}
+\item{n}{number of bmop densities to learn from different datasets}
+
+\item{N}{number of observations in every dataset}
+
+\item{rtrue}{function to generate samples, see \code{\link{rnorm}}}
+
+\item{fun}{a learning function of bmop as \code{\link{bmop_fit}}}
+
+\item{dtrue}{true density function, see \code{\link{dnorm}}}
+
+\item{lwd}{graphical par}
+
+\item{type}{graphical par}
+
+\item{col.true}{the color for the true density}
+
+\item{...}{additional parameters to be passed to \code{rtrue} and
+\code{dtrue}}
 }
 \value{
 \code{invisible() }

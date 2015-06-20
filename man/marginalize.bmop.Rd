@@ -16,7 +16,7 @@ the dimensions that has to be marginalized}
 }
 \value{
 a bmop object over a space of dimension \code{length(MARGIN)}
-the result of integrating over the \code{-MARGIN}
+the result of integrating over the \code{-MARGIN} other dimensions.
 }
 \description{
 marginalize a bmop object, that is integrate a bmop multivariate density

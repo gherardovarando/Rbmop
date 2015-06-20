@@ -16,6 +16,9 @@ logical, TRUE if "bmop" is present among class(object),
 \description{
 Check if an object's class is bmop
 }
+\details{
+Just a call of \code{inherits(object,"bmop")}
+}
 \examples{
 bmop<-bmop_fit(rexp(100))
 is.bmop(bmop)

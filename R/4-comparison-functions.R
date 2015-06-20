@@ -12,8 +12,11 @@
 #' bmopPar(mle=TRUE)
 #' bmop2<-bmop_fit(data)
 #' compare.bmop(bmop1,dtrue=dnorm)
-#' compare.bmop(bmop2,dtrue=dnorm,method="montecarlo")
 compare.bmop<-function(object,dtrue,measure="MSE",...){
+  if (!requireNamespace("cubature", quietly = TRUE)){
+    warning("cubature package is required to compare bmop object")
+    return(NULL)
+  }
   f<-as.function(object)
   ff<-function(x){ (f(x)-dtrue(x,...))^2}
   result<-cubature::adaptIntegrate(f = ff,lowerLimit = lower.bmop(object),
@@ -109,14 +112,23 @@ invisible()
 #' 
 #' This function plots various bmop estimations, from differents datasets.
 #'
-#' @param n 
+#' @param n number of bmop densities to learn from different datasets
+#' @param N number of observations in every dataset
+#' @param rtrue function to generate samples, see \code{\link{rnorm}}
+#' @param dtrue true density function, see \code{\link{dnorm}}
+#' @param fun a learning function of bmop as \code{\link{bmop_fit}}
+#' @param lwd graphical par
+#' @param type graphical par
+#' @param col.true the color for the true density
+#' @param ... additional parameters to be passed to \code{rtrue} and
+#'  \code{dtrue}
 #' @return \code{invisible() }
 #' @export
 #' @examples  
 #' envelope_plot(n=50,N=50,rtrue=rexp,dtrue=dexp)
 envelope_plot<-function(n=100,N=50,rtrue=rnorm,fun=bmop_fit,
                         dtrue=dnorm,lwd=3,type="l",col.true="red",...){
-  data.list<-lapply(rep(N,n),FUN = rtrue)
+  data.list<-lapply(rep(N,n),FUN = rtrue,...)
   bmop.list<-lapply(data.list,FUN=fun)
   min<-sort(sapply(X = bmop.list,function(bmop){
     return(min(bmop$knots[[1]]))
@@ -130,7 +142,7 @@ envelope_plot<-function(n=100,N=50,rtrue=rnorm,fun=bmop_fit,
   max.pos<-max$ix[1]
   if (!is.null(dtrue)){
     tt<-seq(from = min.value,to = max.value,by = (max.value-min.value)/1000)
-    yy<-dtrue(tt)
+    yy<-dtrue(tt,...)
     plot(tt,yy,type = type,lwd=lwd,col = col.true,xlab="x",ylab="")
     points.bmop(x = bmop.list[[1]],col="grey",type=type,lwd=lwd)
   }
@@ -141,7 +153,7 @@ envelope_plot<-function(n=100,N=50,rtrue=rnorm,fun=bmop_fit,
   } 
   if (!is.null(dtrue)){
     tt<-seq(from = min.value,to = max.value,by = (max.value-min.value)/1000)
-    yy<-dtrue(tt)
+    yy<-dtrue(tt,...)
     points.bmop(x = bmop.list[[1]],col="grey",type=type,lwd=lwd)
     points(tt,yy,type = type,lwd=lwd,col = col.true,xlab="x",ylab="")
   }

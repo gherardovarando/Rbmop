@@ -4,23 +4,41 @@
 \alias{new_bmop}
 \title{New bmop object}
 \usage{
-new_bmop(knots, order, ctrpoints = NULL, simple = TRUE, nk = FALSE)
+new_bmop(knots, order, ctrpoints = NULL, nk = FALSE)
 }
 \arguments{
-\item{knots}{list of numeric vector}
+\item{knots}{list of numeric vector, knots of the B-spline basis}
 
-\item{order}{vector}
+\item{order}{vector order of the B-spline for each variable, values will be
+recycled eventually}
 
-\item{ctrpoints}{array}
+\item{ctrpoints}{array of control points}
 
-\item{simple}{logical}
-
-\item{nk}{logical}
+\item{nk}{logical, parameter used internally see details on how to use it}
 }
 \value{
-An object of class bmop, a list with elements \code{order}, \code{knots}, \code{ctrpoints}
+An object of class bmop, a list with elements \code{order},
+\code{knots}, \code{ctrpoints},
 }
 \description{
 Constructor of bmop object.
+}
+\details{
+The function create an object of class \code{bmop}, that is, a list
+with components
+\itemize{
+\item \code{order} vector of orders
+\item \code{knots} list, every element of the list is the vector of knots in
+one dimension, knots are ordered but can be repeted.
+\item \code{ctropoints} An array of control points
+}
+If \code{nk==FALSE} (default method) the knots provided are sorted and the
+\code{unique} function is applied. Then the appropriate knots are computed,
+repeating the first and last knots many times as the order in the considered
+dimension, with this choice the bmop object represent a B-spline function
+regular up to the \code{order-1} derivate in every dimension.
+If \code{nk==TRUE} the bmop object will be created without any check on the
+knots, use carefully this option as it could result in a wrong defined bmop
+object.
 }
 

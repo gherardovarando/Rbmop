@@ -2,7 +2,7 @@
 % Please edit documentation in R/1-base-functions.R
 \name{points.bmop}
 \alias{points.bmop}
-\title{plot points from bmop}
+\title{Plot points from bmop}
 \usage{
 \method{points}{bmop}(x, N = 100, ...)
 }
@@ -14,7 +14,11 @@
 \item{...}{graphical parameters see \code{\link{par}}}
 }
 \description{
-plot points from bmop
+Plot points from bmop
+}
+\details{
+As \code{\link{points}}, this functions provide a way to add the
+plot of a bmop to an existing plot.
 }
 \examples{
 data<-rnorm(200)
@@ -24,6 +28,6 @@ plot(bmopE)
 points(bmopS,type="l",col="red")
 }
 \seealso{
-plot.bmop
+\code{\link{plot.bmop}}.
 }
 

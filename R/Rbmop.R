@@ -7,24 +7,23 @@
 #' of density or conditional density.
 #' \item \code{\link{bmopPar}} function for changing the parameter of the 
 #' package.
-#' \item \code{\link{compare.bmop}} and \code{\link{comaprison_plot}} comparison
+#' \item \code{\link{compare.bmop}} and \code{\link{comparison_plot}} comparison
 #' functions.
 #' \item Moreover the package provide base functions as \code{plot, print} and
-#' conversion methods \code{\link{as.bmop}}.
+#' conversion methods \code{\link{as.function.bmop}}.
 #' }
 #' 
 #' @author Gherardo Varando \email{gherardo.varando@@gmail.com}, 
-#' Concha Bielza and Pedro Larrañaga
+#' Concha Bielza and Pedro Larranaga
 #' @examples
 #'data(trees)
 #'bmop<-bmop_fit(data=trees$Height)
 #'summary(bmop)
 #'##################
-#'
+#'###Envelope for exponential density
 #'envelope_plot(n=50,N=50,rtrue=rexp,dtrue=dexp)
 #'##################
 #'## 
-#'require("MASS")
 #'X<-rnorm(100)
 #'Y<-rnorm(100,mean=X)
 #'data<-data.frame(Y,X)

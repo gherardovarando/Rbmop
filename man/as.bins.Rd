@@ -2,11 +2,21 @@
 % Please edit documentation in R/0-extra-functions.R
 \name{as.bins}
 \alias{as.bins}
-\title{bins}
+\title{Bins grouping}
 \usage{
 as.bins(data, breaks = nclass.FD, ...)
 }
+\arguments{
+\item{data}{a dataset}
+
+\item{breaks}{function or positive integer}
+
+\item{...}{additional parameters}
+}
+\value{
+an object \code{bins}, the data are grouped into bins uniformly
+}
 \description{
-bins
+This function extend the histogram class for multi-dimensional datasets
 }
 

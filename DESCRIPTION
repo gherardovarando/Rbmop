@@ -1,16 +1,13 @@
 Package: Rbmop
 Type: Package
-Title: Handling and estimation of B-spline MoPs densities and conditional densities (bmop)
+Title: B-spline MoPs densities and conditional densities
 Version: 1.0
 Date: 2015-04-06
 Author: Gherardo Varando
 Maintainer: Gherardo Varando <gherardo.varando@gmail.com>
-Description: Handling and estimation of B-spline MoPs densities and conditional densities (bmop)
+Description: Handling, estimation and comparison functions for
+             B-spline MoPs densities and conditional densities (bmop).
 License: GPL-3
-Imports: rgl,
-         RColorBrewer,
-         MASS,
-         cubature,
-         stats
-
-
+Imports: stats
+Suggests: rgl,
+    cubature

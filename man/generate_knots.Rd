@@ -2,7 +2,7 @@
 % Please edit documentation in R/1-base-functions.R
 \name{generate_knots}
 \alias{generate_knots}
-\title{Generate the sequence of knots for bmop objects}
+\title{Generate sequence of knots for bmop objects}
 \usage{
 generate_knots(data = NULL, N = 5, method = "uniform", Min = NULL,
   Max = NULL)
@@ -19,7 +19,7 @@ generate_knots(data = NULL, N = 5, method = "uniform", Min = NULL,
 \item{Max}{numeric}
 }
 \description{
-Generate the sequence of knots for bmop objects
+Generate sequence of knots for bmop objects
 }
 \examples{
 data<-rnorm(200)

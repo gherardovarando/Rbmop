@@ -24,6 +24,5 @@ bmop1<-bmop_fit(data)
 bmopPar(mle=TRUE)
 bmop2<-bmop_fit(data)
 compare.bmop(bmop1,dtrue=dnorm)
-compare.bmop(bmop2,dtrue=dnorm,method="montecarlo")
 }
 

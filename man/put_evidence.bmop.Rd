@@ -19,11 +19,13 @@ put_evidence.bmop(object, evidence, evd.pos = NULL, MIN = 0,
 \item{normalize}{logical, if \code{TRUE} the final bmop object will
 be normalized (usually it is not needed since this function is applied to
 conditional densities)}
+
+\item{...}{additional parameters}
 }
 \value{
 a bmop object, the result of imposing some evidence
 }
 \description{
-Normalize a bmop object, makes it integrate to one.
+Instantiate evidence on a bmop conditional density.
 }
 

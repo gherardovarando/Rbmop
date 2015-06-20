@@ -9,14 +9,31 @@
 #'
 #' Constructor of bmop object.
 #' 
-#' @param knots list of numeric vector
-#' @param order vector
-#' @param ctrpoints array
-#' @param simple logical
-#' @param nk logical
-#' @return An object of class bmop, a list with elements \code{order}, \code{knots}, \code{ctrpoints}
+#' @param knots list of numeric vector, knots of the B-spline basis
+#' @param order vector order of the B-spline for each variable, values will be
+#' recycled eventually
+#' @param ctrpoints array of control points
+#' @param nk logical, parameter used internally see details on how to use it
+#' @return An object of class bmop, a list with elements \code{order}, 
+#' \code{knots}, \code{ctrpoints},
+#' @details The function create an object of class \code{bmop}, that is, a list
+#' with components
+#' \itemize{
+#' \item \code{order} vector of orders
+#' \item \code{knots} list, every element of the list is the vector of knots in
+#' one dimension, knots are ordered but can be repeted.
+#' \item \code{ctropoints} An array of control points
+#' }
+#' If \code{nk==FALSE} (default method) the knots provided are sorted and the
+#' \code{unique} function is applied. Then the appropriate knots are computed,
+#' repeating the first and last knots many times as the order in the considered 
+#' dimension, with this choice the bmop object represent a B-spline function
+#' regular up to the \code{order-1} derivate in every dimension.
+#' If \code{nk==TRUE} the bmop object will be created without any check on the 
+#' knots, use carefully this option as it could result in a wrong defined bmop 
+#' object.
 #' @export
-new_bmop<-function(knots,order,ctrpoints = NULL,simple = TRUE,nk = FALSE){
+new_bmop<-function(knots,order,ctrpoints = NULL,nk = FALSE){
   d<-length(order)
   l<-length(knots)
   if (l!=d){ order<-rep(order,l)[1:l]
@@ -26,19 +43,13 @@ new_bmop<-function(knots,order,ctrpoints = NULL,simple = TRUE,nk = FALSE){
   if (!nk){
     knots<-lapply(knots,FUN=unique)
     nknots<-list()
-    if (simple){
       for (i in 1:d){
         nknots[[i]]<-c(rep(knots[[i]][1],order[i]-1),knots[[i]],
                        rep(knots[[i]][length(knots[[i]])],order[i]-1))
       }
-    }
-    if (!simple){
-      for (i in 1:d)
-        nknots[[i]]<-sort(c(rep(knots[[i]][1] - 1, order[i] - 1),knots[[i]],
-                            rep(knots[[i]][length(knots[[i]])] + 1,order[i] - 1)))
-    }
+
   }
-  if (nk) {
+  else {
      nknots<-knots
   }
   if (is.null(ctrpoints)) {
@@ -61,6 +72,7 @@ new_bmop<-function(knots,order,ctrpoints = NULL,simple = TRUE,nk = FALSE){
 #' @param object an R object
 #' @return logical, TRUE if "bmop" is present among class(object),
 #'  FALSE otherwise
+#'  @details Just a call of \code{inherits(object,"bmop")}
 #' @export
 #' @examples
 #' bmop<-bmop_fit(rexp(100))
@@ -71,40 +83,19 @@ is.bmop<-function(object){
 
 
 
-
-
-# 
-# deboor<-function(t,k,knots,ctr,MIN=10^(-10)){
-#    n<-length(knots)
-#    N<-length(ctr)
-#    if ((t < knots[1]) | (t > knots[n])) { return(MIN)}
-#    if (t == knots[n]) {return(max(MIN,ctr[N])) }
-#    if (t == knots[1]) {return(max(MIN,ctr[1]))}
-#    l<-locate(t,knots)
-#    if (k == 1) { return(ctr[l])}
-#    s<-multiplicity(t,knots)
-#    ctrnew<-ctr
-#    for (j in 1:(k-s)){
-#       for (i in (l-k+j):(l-s)){
-#         alpha<-(t-knots[i+1])/(knots[i+k-j+1]-knots[i+1])
-#         ctrnew[i+1]<-(1-alpha)*ctr[i]+alpha*ctr[i+1]
-#       }
-#      ctr<-ctrnew
-#    }
-#    if (is.na(ctr[l-s])){ return(MIN)}
-#    return(max(MIN,ctr[l-s]))
-# }
-
-
-
 #' Evaluation of a bmop object
 #'
 #' @param x numeric, vector, matrix
 #' @param object bmop object
 #' @param MIN numeric
 #' @return Numeric value (values) of the computed bspline at point
-#'  (points) \code{x},
-#'         deBoor algorithm is used.
+#'  (points) \code{x}.
+#'  
+#' @details The deBoor algorithm is used, implemented in C.
+#' @references Carl de Boor, 
+#' On calculating with B-splines, \emph{Journal of Approximation Theory}, 
+#' Volume 6, Issue 1, July 1972, Pages 50-62, 
+#' \url{http://www.sciencedirect.com/science/article/pii/0021904572900809}.
 #' @export
 #' @examples
 #' bmop<-bmop_fit(rnorm(100))
@@ -145,6 +136,7 @@ evaluate.bmop<-function(x,object,MIN=bmopPar()$MIN){
 }
 
 
+
 delta<-function(bmop,x,...){
   d<-length(bmop$order)
   c<-array(dim = dim(bmop$ctrpoints),1)
@@ -159,8 +151,6 @@ delta<-function(bmop,x,...){
   }
   c<-c*k
   }
-  
-  
   return(c)
 }
 
@@ -193,11 +183,23 @@ integration_constants<-function(bmop,append.extra=F){
 #' @param persp logical
 #' @param file optional file name, where to save a pdf copy of the plot 
 #' @param MIN parameter of \code{\link{evaluate.bmop}}
-#' @param ... arguments to be passed to methods, such as graphical parameters
-#'  (as in plot.default)
-#' @return plot of 1-d or 2-d (contour and perspective) bmop, an emty plot and 
-#' a warning message are returned if the bmop object has more than 2 dimension 
+#' @param ... graphical parameters as \code{col,main,...}, see 
+#' \code{\link{plot}} or \code{\link{filled.contour}}
+#' @return plot of 1-d or 2-d (contour and perspective) bmop, an empty plot and 
+#' a warning message are returned if the bmop object has more than 2 dimensions.
+#' @details For the 2-d persp (\code{persp==TRUE}) plot the \code{rgl} package 
+#' is needed.
+#' In order to obtain a nicer result in the contour plot, try to supply a 
+#' \code{col} or \code{color.palette} parameter, like in the example below 
+#' (\code{RColorBrewer} package is needed).
 #' @seealso \link{points.bmop}
+#' @examples
+#' \dontrun{
+#' bmop<-bmop_fit(data.frame(rnorm(100),rnorm(100)))
+#' colFun<-
+#' grDevices::colorRampPalette(RColorBrewer::brewer.pal(9,name="YlGnBu"))
+#' plot(bmop,color.palette=colFun)
+#' }
 #' @export
 plot.bmop<-function(x,N=1000,type="l",contour=TRUE,persp=FALSE,file=NULL,MIN=0,
                     ...){
@@ -221,7 +223,10 @@ plot.bmop<-function(x,N=1000,type="l",contour=TRUE,persp=FALSE,file=NULL,MIN=0,
     z<-evaluate.bmop(object = x,x = grid,MIN = MIN)
     z<-matrix(nrow=N+1,ncol=N+1,z,byrow=F)
     if (persp){
-      rgl::persp3d(x=t1,y=t2,z=z,col="red",...)}
+      if (requireNamespace("rgl", quietly = TRUE)){
+      rgl::persp3d(x=t1,y=t2,z=z,col="red",...)
+      }
+    }
     if (contour) {
       if (!is.null(file)) { pdf(file=file) }
       zlim <- range(z, finite=TRUE)
@@ -229,9 +234,7 @@ plot.bmop<-function(x,N=1000,type="l",contour=TRUE,persp=FALSE,file=NULL,MIN=0,
       nlevels <- 20
       levels <- pretty(zlim, nlevels)
       nlevels <- length(levels)
-      filled.contour(x=t1,y=t2,z=z,nlevels=nlevels,levels=levels,las=1,main="",
-                     col=grDevices::colorRampPalette(
-                       RColorBrewer::brewer.pal(9,name="YlGnBu"))(nlevels))
+      filled.contour(x=t1,y=t2,z=z,nlevels=nlevels,levels=levels,las=1,...)
       if (!is.null(file)){ dev.off()}
     }
   }
@@ -296,12 +299,14 @@ print.bmop<-function(x,...){
   }
 }
 
-#' plot points from bmop 
+#' Plot points from bmop 
 #'
 #' @param x bmop object
 #' @param N number of points to plot
 #' @param ... graphical parameters see \code{\link{par}}
-#' @seealso plot.bmop
+#' @details As \code{\link{points}}, this functions provide a way to add the 
+#' plot of a bmop to an existing plot.
+#' @seealso \code{\link{plot.bmop}}.
 #' @export
 #' @examples 
 #' data<-rnorm(200)
@@ -333,7 +338,7 @@ integrate.bmop<-function(object){
   #upper = object$knots[[1]][length(object$knots[[1]])]))
 }
 
-#' Generate the sequence of knots for bmop objects
+#' Generate sequence of knots for bmop objects
 #'
 #' @param data data.frame matrix vector
 #' @param N positive integer, the number of knots

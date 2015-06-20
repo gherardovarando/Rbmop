@@ -22,15 +22,30 @@
 
 \item{MIN}{parameter of \code{\link{evaluate.bmop}}}
 
-\item{...}{arguments to be passed to methods, such as graphical parameters
-(as in plot.default)}
+\item{...}{graphical parameters as \code{col,main,...}, see
+\code{\link{plot}} or \code{\link{filled.contour}}}
 }
 \value{
-plot of 1-d or 2-d (contour and perspective) bmop, an emty plot and
-a warning message are returned if the bmop object has more than 2 dimension
+plot of 1-d or 2-d (contour and perspective) bmop, an empty plot and
+a warning message are returned if the bmop object has more than 2 dimensions.
 }
 \description{
 Plot of bmop object
+}
+\details{
+For the 2-d persp (\code{persp==TRUE}) plot the \code{rgl} package
+is needed.
+In order to obtain a nicer result in the contour plot, try to supply a
+\code{col} or \code{color.palette} parameter, like in the example below
+(\code{RColorBrewer} package is needed).
+}
+\examples{
+\dontrun{
+bmop<-bmop_fit(data.frame(rnorm(100),rnorm(100)))
+colFun<-
+grDevices::colorRampPalette(RColorBrewer::brewer.pal(9,name="YlGnBu"))
+plot(bmop,color.palette=colFun)
+}
 }
 \seealso{
 \link{points.bmop}
