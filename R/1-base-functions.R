@@ -513,6 +513,7 @@ upper.bmop<-function(object){
   return(sapply(object$knots,max))
 }
 
+
 #' Mean value for a bmop density
 #'
 #' @param x a bmop object
