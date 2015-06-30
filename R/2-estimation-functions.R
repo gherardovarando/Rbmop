@@ -129,13 +129,18 @@ define_bmop<-function(bmop=NULL,data=NULL,Max=NULL,Min=NULL,
   if (is.null(data)){ 
     return(
       new_bmop(ctrpoints = 1,
-               knots = generate_knots(data = data,N = max(1,N),Max = Max,Min = Min),
+               knots = generate_knots(data = data,N = max(1,N),
+                                      Max = Max,Min = Min),
                order = order))}
   if (inherits(data,what = "histogram")|inherits(data,what = "bins")){
     counts <- data$counts
     data <- data$mids
     data <- as.data.frame(data)
     alpha <- 1/log(sum(counts) ^ ( 1/alpha ),base = dim(data)[1])
+  }
+  else if (inherits(data,"values")){
+    data <- data$mids
+    data <- as.data.frame(data)
   }
   else{
   data<-as.data.frame(data)
@@ -156,6 +161,7 @@ define_bmop<-function(bmop=NULL,data=NULL,Max=NULL,Min=NULL,
 #'
 #'@param data data.frame, matrix, vector or object of class "histogram" or
 #' "bins"
+#' @param density logic, if \code{TRUE} a density is learned
 #' @param conditional logic, if \code{TRUE} a conditional density is learned
 #' @param Min vector of lower bounds
 #' @param Max vector of upper bounds
@@ -180,7 +186,7 @@ define_bmop<-function(bmop=NULL,data=NULL,Max=NULL,Min=NULL,
 #' bmopPar(mle=TRUE)
 #' bmopC<-bmop_fit(Data,conditional=TRUE)
 #' plot(bmopC)
-bmop_fit<-function(data,conditional=F,Min=NULL,Max=NULL,...){
+bmop_fit<-function(data,density=TRUE,conditional=FALSE,Min=NULL,Max=NULL,...){
   UseMethod("bmop_fit",object = data)
 }
 
@@ -188,14 +194,17 @@ bmop_fit<-function(data,conditional=F,Min=NULL,Max=NULL,...){
 #'
 #'@param data data.frame, matrix, vector or object of class "histogram" or
 #' "bins"
+#' @param density logic, if \code{TRUE} a density is learned
 #' @param conditional logic, if \code{TRUE} a conditional density is learned
 #' @param Min vector of lower bounds
 #' @param Max vector of upper bounds
 #' @param ... see \code{bmopPar}
 #' @return a bmop object
 #' @export
- bmop_fit.default<-function(data,conditional=F,Min=NULL,Max=NULL,...){
- return(bmop_fit.data.frame(as.data.frame(data),conditional=conditional,
+ bmop_fit.default<-function(data,density=TRUE,conditional=FALSE,Min=NULL,
+                            Max=NULL,...){
+ return(bmop_fit.data.frame(as.data.frame(data),density=density,
+                            conditional=conditional,
                      Min=Min,Max=Max,...) )
 }
 
@@ -206,6 +215,7 @@ bmop_fit<-function(data,conditional=F,Min=NULL,Max=NULL,...){
 #'
 #'@param data data.frame, matrix or vector
 #'the variables must be in the right order (the columns of data)
+#' @param density logic, if \code{TRUE} a density is learned
 #' @param conditional logic, if \code{TRUE} a conditional density is learned
 #' @param Min vector of lower bounds
 #' @param Max vector of upper bounds
@@ -213,11 +223,23 @@ bmop_fit<-function(data,conditional=F,Min=NULL,Max=NULL,...){
 #' @param ... see \code{bmopPar}
 #' @return a bmop object
 #'@export
-bmop_fit.data.frame<-function(data, conditional=F,
+bmop_fit.data.frame<-function(data,density=TRUE, conditional=F,
                               Min=NULL,
                               Max=NULL,
                               bmop=NULL,
                               ... ){
+  if ((!density)&(!conditional)){
+    if (dim(data)[2]==1){
+      density=TRUE
+    }
+    else{
+    H<-list()
+    class(H)<-"values"
+    H$mids<-data[,-(dim(data)[2])]
+    H$counts<-data[,(dim(data)[2])]
+    return(bmop_fit(H,Min=Min,Max=Max,bmop=bmop,...))
+    }
+  }
   data<-as.data.frame(data)
   if (dim(data)[1]>bmopPar()$autoReduce){
     warning("Data dimension exceded bmopPar()$autoreduce parameter. 
@@ -232,6 +254,7 @@ bmop_fit.data.frame<-function(data, conditional=F,
       breaks<-max(1, floor(max(sapply(data,nclass.FD))^{1/(dim(data)[2])} ))
     }
     return(bmop_fit.bins(data = as.bins(data = data,breaks = breaks),
+                                        density=density,
                                         conditional=conditional,...))
   }
   m<-define_bmop(bmop = bmop,data = data,Max = Max,Min = Min,...)
@@ -248,13 +271,27 @@ bmop_fit.data.frame<-function(data, conditional=F,
   else{
     repmax<-bmopPar()$repMax
   }
+  
+  if (!density){
+    repmax <- 1 
+    # new bmop_fit.sskskfklak
+  }
+  
   for (s in 1:repmax){
     K<-array(dim=dim(m$ctrpoints),0)
-    for (i in 1:(dim(data)[1])){
-      K<-K+D[E==i]/sum(D[E==i]*m$ctrpoints)
-    }
+    
+      for (i in 1:(dim(data)[1])){
+        K<-K+D[E==i]/sum(D[E==i]*m$ctrpoints)
+      }
+    
+    
     mnew<-m
     mnew$ctrpoints<-m$ctrpoints*K
+    KK<-N
+    if (density){
+      KK<- N*C
+      conditional <- FALSE
+    }
     if (conditional){
       C<-integration_constants(new_bmop(knots = m$knots[1],
                                         order = m$order[1]))
@@ -263,9 +300,6 @@ bmop_fit.data.frame<-function(data, conditional=F,
       for (i in 1:(dim(mnew$ctrpoints)[1])){
         KK [ix==i] <- (C[i]*apply(mnew$ctrpoints,MARGIN = -1,sum)) 
       }
-    }
-    else{
-      KK<- N*C
     }
     mnew$ctrpoints<- mnew$ctrpoints/ KK
     mnew$logLik<-logLik.bmop(object = mnew,data = data)
@@ -283,6 +317,7 @@ bmop_fit.data.frame<-function(data, conditional=F,
 #'
 #'@param data \code{histogram} or \code{bins} object
 #'the variables must be in the right order
+#' @param density logic, if \code{TRUE} a density is learned
 #' @param conditional logic, if \code{TRUE} a conditional density is learned
 #' @param Min vector of lower bounds
 #' @param Max vector of upper bounds
@@ -290,11 +325,15 @@ bmop_fit.data.frame<-function(data, conditional=F,
 #' @param ... see \code{bmopPar}
 #' @return a bmop object
 #'@export
-bmop_fit.bins<-function(data, conditional=F,
+bmop_fit.bins<-function(data, density=TRUE, conditional=F,
                               Min=NULL,
                               Max=NULL,
                               bmop=NULL,
                               ... ){
+  if ((!density)&(!conditional)){
+   class(data)<-"values"
+   return(bmop_fit(data,Min=Min,Max=Max,bmop=bmop,...))
+  }
   m<-define_bmop(bmop = bmop,data = data,Max = Max,Min = Min,...)
   m<-normalize.bmop(m)
   d<-length(m$order) 
@@ -315,10 +354,16 @@ bmop_fit.bins<-function(data, conditional=F,
   for (s in 1:repmax){
     K<-array(dim=dim(m$ctrpoints),0)
     for (i in 1:(dim(data)[1])){
-      K<-K+D[E==i]*counts[i]/sum(D[E==i]*m$ctrpoints)
+     K<-K+D[E==i]*counts[i]/sum(D[E==i]*m$ctrpoints)
+     # K<-K+D[E==i]*counts[i]
     }
     mnew<-m
     mnew$ctrpoints<-m$ctrpoints*K
+    KK<-dim(data)[1]*C
+    if (density){
+      KK<- N*C
+      conditional <- FALSE
+    }
     if (conditional){
       C<-integration_constants(new_bmop(knots = m$knots[1],
                                         order = m$order[1]))
@@ -328,9 +373,6 @@ bmop_fit.bins<-function(data, conditional=F,
         KK [ix==i] <- (C[i]*apply(mnew$ctrpoints,MARGIN = -1,sum)) 
       }
     }
-    else{
-      KK<- N*C
-    }
     mnew$ctrpoints<- mnew$ctrpoints/ KK
     mnew$logLik<-logLik.bmop(object = mnew,data = DD)
     if ((mnew$logLik-m$logLik)<bmopPar()$toll){
@@ -338,7 +380,8 @@ bmop_fit.bins<-function(data, conditional=F,
     }
     m<-mnew
   }
-  
+  mnew$info$density<- density
+  mnew$info$conditional <- conditional
   return(mnew)
 }
 
@@ -346,6 +389,7 @@ bmop_fit.bins<-function(data, conditional=F,
 #'
 #'@param data \code{histogram} or \code{bins} object
 #'the variables must be in the right order
+#' @param density logic, if \code{TRUE} a density is learned
 #' @param conditional logic, if \code{TRUE} a conditional density is learned
 #' @param Min vector of lower bounds
 #' @param Max vector of upper bounds
@@ -355,6 +399,44 @@ bmop_fit.bins<-function(data, conditional=F,
 #'@export
 bmop_fit.histogram <- bmop_fit.bins
 
+#'Estimation of bmop regression fucntions
+#'
+#'@param data \code{values} object
+#'the variables must be in the right order
+#' @param Min vector of lower bounds
+#' @param Max vector of upper bounds
+#' @param bmop  a bmop object
+#' @param ... see \code{bmopPar}
+#' @return a bmop object
+#'@export
+bmop_fit.values<-function(data, density=FALSE, conditional=FALSE,
+                        Min=NULL,
+                        Max=NULL,
+                        bmop=NULL,
+                        ... ){
+  m<-define_bmop(bmop = bmop,data = data,Max = Max,Min = Min,...)
+ # m<-normalize.bmop(m)
+  d<-length(m$order) 
+  C<-integration_constants(m)
+  counts<-data$counts
+  data<-as.data.frame(data$mids)
+  D<-apply(data,MARGIN = 1,FUN = delta,bmop=m,MIN=10^(-10)) 
+  dim(D)<-c(dim(m$ctrpoints),dim(data)[1])
+  E<-slice.index(D,MARGIN = length(dim(D)))
+ 
+    K<-array(dim=dim(m$ctrpoints),0)
+    for (i in 1:(dim(data)[1])){
+      #K<-K+D[E==i]*counts[i]/sum(D[E==i]*m$ctrpoints)
+       print(D[E==i])
+       K<-K+D[E==i]*counts[i]
+    }
+    mnew<-m
+    mnew$ctrpoints<- K
+    KK<-(dim(data)[1])*C
+    mnew$ctrpoints<- mnew$ctrpoints/ KK
+  print(C)
+  return(mnew)
+}
 
 #' Greedy penalized log-likelihood search
 #'
@@ -387,9 +469,7 @@ search_bmop<-function(data,conditional=F,k=Rbmop::bmopPar()$k,corrected=FALSE,
     N<-dim(data)[1]
     d<-dim(data)[2]
   }
-  if (k=="BIC"){
-    k<-log(N)
-  }
+  
   N<-rep(2,d)
   order=rep(3,d)
   bmopPar(N=N,order=order,mle=T)

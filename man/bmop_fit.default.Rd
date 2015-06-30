@@ -4,12 +4,14 @@
 \alias{bmop_fit.default}
 \title{Estimation of bmop density or conditional density}
 \usage{
-\method{bmop_fit}{default}(data, conditional = F, Min = NULL, Max = NULL,
-  ...)
+\method{bmop_fit}{default}(data, density = TRUE, conditional = FALSE,
+  Min = NULL, Max = NULL, ...)
 }
 \arguments{
 \item{data}{data.frame, matrix, vector or object of class "histogram" or
 "bins"}
+
+\item{density}{logic, if \code{TRUE} a density is learned}
 
 \item{conditional}{logic, if \code{TRUE} a conditional density is learned}
 

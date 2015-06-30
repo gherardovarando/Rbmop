@@ -137,7 +137,7 @@ evaluate.bmop<-function(x,object,MIN=bmopPar()$MIN){
 
 
 
-delta<-function(bmop,x,...){
+delta<-function(bmop,x,MIN=bmopPar()$MIN){
   d<-length(bmop$order)
   c<-array(dim = dim(bmop$ctrpoints),1)
   for (i in 1:d){
@@ -146,7 +146,7 @@ delta<-function(bmop,x,...){
    ix<-slice.index(x = k,MARGIN = i)
    for (j in 1:(dim(c)[i])){
       m$ctrpoints[j]<-1
-      k[ix==j]<-evaluate.bmop(x = x[i],object=m,...)
+      k[ix==j]<-evaluate.bmop(x = x[i],object=m,MIN = MIN)
       m$ctrpoints[j]<-0
   }
   c<-c*k
