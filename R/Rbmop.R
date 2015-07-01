@@ -19,9 +19,7 @@
 #'data(trees)
 #'bmop<-bmop_fit(data=trees$Height)
 #'summary(bmop)
-#'##################
-#'###Envelope for exponential density
-#'envelope_plot(n=50,N=50,rtrue=rexp,dtrue=dexp)
+#'
 #'##################
 #'## 
 #'X<-rnorm(100)
@@ -72,6 +70,24 @@
 #' print(resultsMLE)
 #' bmopPar(mle=FALSE)
 #' 
+#' #Gamma
+#' 
+#' envelope_plot(1000,1000,rtrue = rgamma,dtrue = dgamma,shape=3)
+#' 
+#' ## Study of Errors and KL
+#' 
+#' Ns<-seq(from = 100,to=100000,by = 1000)
+#' dim(Ns)<-c(length(Ns),1)
+#' res<-as.data.frame(t(apply(Ns,MARGIN=1,function(i){ 
+#' dat<-rnorm(i)
+#' return(c(
+#'KL= KL.bmop(object = bmop_fit(dat),dtrue = dnorm),
+#'SE= squareError.bmop(object = bmop_fit(dat),dtrue = dnorm)
+#' )) })))
+#' plot(Ns,res$SE,lwd=3,type="l",log="y",ylab="")
+#' points(Ns,res$KL,lwd=3,col="red",type="l")
+#' legend("topright",legend = c("Square Error","KL"),
+#' col = c("black","red"),lty=1,lwd=3)
 #' @docType package
 #' @name Rbmop
 NULL

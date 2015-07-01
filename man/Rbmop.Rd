@@ -13,7 +13,7 @@ The main functions of Rbmop package are the following:
 of density or conditional density.
 \item \code{\link{bmopPar}} function for changing the parameter of the
 package.
-\item \code{\link{compare.bmop}} and \code{\link{comparison_plot}} comparison
+\item \code{\link{squareError.bmop}} and \code{\link{comparison_plot}} comparison
 functions.
 \item Moreover the package provide base functions as \code{plot, print} and
 conversion methods \code{\link{as.function.bmop}}.
@@ -23,9 +23,7 @@ conversion methods \code{\link{as.function.bmop}}.
 data(trees)
 bmop<-bmop_fit(data=trees$Height)
 summary(bmop)
-##################
-###Envelope for exponential density
-envelope_plot(n=50,N=50,rtrue=rexp,dtrue=dexp)
+
 ##################
 ##
 X<-rnorm(100)
@@ -75,6 +73,25 @@ bmopPar(mle=TRUE)
 resultsMLE<-envelope_plot(n=100,N=100,dtrue=dexp,rtrue=rexp)
 print(resultsMLE)
 bmopPar(mle=FALSE)
+
+#Gamma
+
+envelope_plot(1000,1000,rtrue = rgamma,dtrue = dgamma,shape=3)
+
+## Study of Errors and KL
+
+Ns<-seq(from = 100,to=100000,by = 1000)
+dim(Ns)<-c(length(Ns),1)
+res<-as.data.frame(t(apply(Ns,MARGIN=1,function(i){
+dat<-rnorm(i)
+return(c(
+KL= KL.bmop(object = bmop_fit(dat),dtrue = dnorm),
+SE= squareError.bmop(object = bmop_fit(dat),dtrue = dnorm)
+)) })))
+plot(Ns,res$SE,lwd=3,type="l",log="y",ylab="")
+points(Ns,res$KL,lwd=3,col="red",type="l")
+legend("topright",legend = c("Square Error","KL"),
+col = c("black","red"),lty=1,lwd=3)
 }
 \author{
 Gherardo Varando \email{gherardo.varando@gmail.com},

@@ -4,6 +4,7 @@
 #' @param object bmop object
 #' @param dtrue function
 #' @param ... optional arguments to be passed to \code{dtrue}
+#' @return Numeric, the square error between bmop denisty and true density
 #' @export
 #' @examples 
 #' data<-rnorm(200)
@@ -22,6 +23,39 @@ squareError.bmop<-function(object,dtrue,...){
                          upperLimit = upper.bmop(object))$integral
   return(result)
 } 
+
+
+#' Kullback-Leibler (KL) divergence between bmop and true density
+#'
+#' @param object bmop object
+#' @param dtrue function
+#' @param ... optional arguments to be passed to \code{dtrue}
+#' @return Numeric, the KL divergence.
+#' @export
+#' @examples 
+#' data<-rnorm(200)
+#' bmop1<-bmop_fit(data)
+#' bmopPar(mle=TRUE)
+#' bmop2<-bmop_fit(data)
+#' KL.bmop(bmop1,dtrue=dnorm)
+#' KL.bmop(bmop2,dtrue=dnorm)
+KL.bmop<-function(object,dtrue,...){
+  if (!requireNamespace("cubature", quietly = TRUE)){
+    warning("cubature package is required to compare bmop object")
+    return(NULL)
+  }
+  f<-as.function(object)
+  ff<-function(x){ 
+    d<-dtrue(x,...)
+    o<-f(x)
+    return(o*log(o/d))
+  }
+  result<-cubature::adaptIntegrate(f = ff,lowerLimit = lower.bmop(object),
+                                   upperLimit = upper.bmop(object))$integral
+  return(result)
+} 
+
+
 
 
 
