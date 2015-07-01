@@ -30,7 +30,9 @@
 #'
 #'###################
 #'## Trimodal-not differentiable density estimation via histogram
-#'f<-function(x){return( (dnorm(x,mean=6)+dnorm(x,mean=-3)+dgamma(x,shape=2))/3 )}
+#'f<-function(x){return( (dnorm(x,mean=6)+
+#'                        dnorm(x,mean=-3)+
+#'                        dgamma(x,shape=2))/3 )}
 #'D<-c(rnorm(10000,mean=-3),rgamma(10000,shape=2),rnorm(10000,mean=+6))
 #'bmopPar(mle=TRUE)
 #'bmop<-bmop_fit(hist(D,nclass.FD))
@@ -74,6 +76,7 @@
 #' 
 #' envelope_plot(1000,1000,rtrue = rgamma,dtrue = dgamma,shape=3)
 #' 
+#' ############################################
 #' ## Study of Errors and KL
 #' 
 #' Ns<-seq(from = 100,to=100000,by = 1000)
