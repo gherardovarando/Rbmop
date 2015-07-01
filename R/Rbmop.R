@@ -7,7 +7,7 @@
 #' of density or conditional density.
 #' \item \code{\link{bmopPar}} function for changing the parameter of the 
 #' package.
-#' \item \code{\link{compare.bmop}} and \code{\link{comparison_plot}} comparison
+#' \item \code{\link{squareError.bmop}} and \code{\link{comparison_plot}} comparison
 #' functions.
 #' \item Moreover the package provide base functions as \code{plot, print} and
 #' conversion methods \code{\link{as.function.bmop}}.
@@ -48,8 +48,30 @@
 #'
 #' Ex<-ex_bmop_gaussianBetaGamma(N = 10000,m1 = 8)
 #' points(density(Ex$data),type="l",col="blue",lwd=3)
-#' compare.bmop(Ex$bmop,Ex$true,c("MSE","MAE","MAX"))
-#'
+#' squareError.bmop(Ex$bmop,Ex$true)
+#' 
+#' #######################
+#' ## Envelopes
+#' 
+#' #Gaussian 
+#' results<-envelope_plot(n=100,N=100,dtrue=dnorm,rtrue=rnorm)
+#' print(results)
+#' # Maximum Likelihood
+#' bmopPar(mle=TRUE)
+#' resultsMLE<-envelope_plot(n=100,N=100,dtrue=dnorm,rtrue=rnorm)
+#' print(resultsMLE)
+#' bmopPar(mle=FALSE)
+#' 
+#' #Exponential
+#' 
+#' results<-envelope_plot(n=100,N=1000,dtrue=dexp,rtrue=rexp)
+#' print(results)
+#' # Maximum Likelihood
+#' bmopPar(mle=TRUE)
+#' resultsMLE<-envelope_plot(n=100,N=100,dtrue=dexp,rtrue=rexp)
+#' print(resultsMLE)
+#' bmopPar(mle=FALSE)
+#' 
 #' @docType package
 #' @name Rbmop
 NULL

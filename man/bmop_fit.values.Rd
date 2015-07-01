@@ -4,8 +4,7 @@
 \alias{bmop_fit.values}
 \title{Estimation of bmop regression fucntions}
 \usage{
-\method{bmop_fit}{values}(data, density = FALSE, conditional = FALSE,
-  Min = NULL, Max = NULL, bmop = NULL, ...)
+\method{bmop_fit}{values}(data, Min = NULL, Max = NULL, bmop = NULL, ...)
 }
 \arguments{
 \item{data}{\code{values} object

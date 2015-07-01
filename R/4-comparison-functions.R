@@ -1,9 +1,8 @@
 
-#' Compare bmop with true density
+#' Square Error between bmop and true density
 #'
 #' @param object bmop object
 #' @param dtrue function
-#' @param measure string, \code{"MSE"}, \code{"MAE"}, \code{"MAX"}
 #' @param ... optional arguments to be passed to \code{dtrue}
 #' @export
 #' @examples 
@@ -11,8 +10,8 @@
 #' bmop1<-bmop_fit(data)
 #' bmopPar(mle=TRUE)
 #' bmop2<-bmop_fit(data)
-#' compare.bmop(bmop1,dtrue=dnorm)
-compare.bmop<-function(object,dtrue,measure="MSE",...){
+#' squareError.bmop(bmop1,dtrue=dnorm)
+squareError.bmop<-function(object,dtrue,...){
   if (!requireNamespace("cubature", quietly = TRUE)){
     warning("cubature package is required to compare bmop object")
     return(NULL)
@@ -140,13 +139,26 @@ envelope_plot<-function(n=100,N=50,rtrue=rnorm,fun=bmop_fit,
   min.pos<-min$ix[1]
   max.value<-max$x[1]
   max.pos<-max$ix[1]
+  Squareerrors<-sapply(bmop.list,squareError.bmop,dtrue,...)
+  
+  meanSquareError<-mean(Squareerrors)
+  sdSquareError<- sd(Squareerrors)
+  
   if (!is.null(dtrue)){
     tt<-seq(from = min.value,to = max.value,by = (max.value-min.value)/1000)
     yy<-dtrue(tt,...)
-    plot(tt,yy,type = type,lwd=lwd,col = col.true,xlab="x",ylab="")
+    plot(tt,yy,type = type,lwd=lwd,col = col.true,xlab="x",ylab="",main=
+           paste("Smpl (n)",n,
+                 ", Obs (N)",N,
+             ", MSE",signif(meanSquareError,digits=4),", SD",
+                 signif(sdSquareError,digits=4),sep=" "))
     points.bmop(x = bmop.list[[1]],col="grey",type=type,lwd=lwd)
   }
-  else{ plot.bmop(x = bmop.list[[1]],col="grey",type=type,lwd=lwd)
+  else{ plot.bmop(x = bmop.list[[1]],col="grey",type=type,lwd=lwd,main=
+                    paste("Smpl (n)",n,
+                          ", Obs (N)",N,
+                          ", MSE",signif(meanSquareError,digits=4),", SD",
+                          signif(sdSquareError,digits=4),sep=" "))
   }
   for (i in 2:length(bmop.list)){
     points.bmop(x = bmop.list[[i]],col="grey",type=type,lwd=lwd)
@@ -158,7 +170,7 @@ envelope_plot<-function(n=100,N=50,rtrue=rnorm,fun=bmop_fit,
     points(tt,yy,type = type,lwd=lwd,col = col.true,xlab="x",ylab="")
   }
   else{ points.bmop(x = bmop.list[[1]],col="grey",type=type,lwd=lwd)}
-  invisible()
+  invisible(list(MSE=meanSquareError,SD=sdSquareError))
 }
 
 

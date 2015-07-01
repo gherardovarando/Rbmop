@@ -52,7 +52,29 @@ points(density(Ex$data),type="l",col="blue",lwd=3)
 
 Ex<-ex_bmop_gaussianBetaGamma(N = 10000,m1 = 8)
 points(density(Ex$data),type="l",col="blue",lwd=3)
-compare.bmop(Ex$bmop,Ex$true,c("MSE","MAE","MAX"))
+squareError.bmop(Ex$bmop,Ex$true)
+
+#######################
+## Envelopes
+
+#Gaussian
+results<-envelope_plot(n=100,N=100,dtrue=dnorm,rtrue=rnorm)
+print(results)
+# Maximum Likelihood
+bmopPar(mle=TRUE)
+resultsMLE<-envelope_plot(n=100,N=100,dtrue=dnorm,rtrue=rnorm)
+print(resultsMLE)
+bmopPar(mle=FALSE)
+
+#Exponential
+
+results<-envelope_plot(n=100,N=1000,dtrue=dexp,rtrue=rexp)
+print(results)
+# Maximum Likelihood
+bmopPar(mle=TRUE)
+resultsMLE<-envelope_plot(n=100,N=100,dtrue=dexp,rtrue=rexp)
+print(resultsMLE)
+bmopPar(mle=FALSE)
 }
 \author{
 Gherardo Varando \email{gherardo.varando@gmail.com},

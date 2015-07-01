@@ -78,10 +78,16 @@ put_evidence.bmop<-function(object,evidence,evd.pos=NULL,
  if (length(object$order)==1){return(object)}
  idx<-slice.index(object$ctrpoints,MARGIN = 1)
  if (is.null(evd.pos)){ evd.pos<-2: (length(evidence)+1)}
+ 
+ evd.pos<-evd.pos[evd.pos>1]
+ evd.pos<-evd.pos[evd.pos<=length(object$order)]
+ free.pos<-(1:length(object$order))[-evd.pos]
+ 
  bmop<-new_bmop(knots = object$knots[-evd.pos],
                 order=object$order[-evd.pos],nk = T)
- bmop$ctrpoints<-apply(object$ctrpoints,MARGIN = -evd.pos,FUN = function(ctr){
-   m<-new_bmop(knots=object$knots[evd.pos],order=object$order[evd.pos],nk=T,
+ 
+ bmop$ctrpoints<-apply(object$ctrpoints,MARGIN = free.pos,FUN = function(ctr){
+   m<-new_bmop(knots=object$knots[evd.pos],order=object$order[evd.pos], nk=T,
                ctrpoints = ctr)
    return(evaluate.bmop(x = evidence,object = m,MIN = MIN))
  })

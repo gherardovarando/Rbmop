@@ -290,7 +290,6 @@ bmop_fit.data.frame<-function(data,density=TRUE, conditional=F,
     KK<-N
     if (density){
       KK<- N*C
-      conditional <- FALSE
     }
     if (conditional){
       C<-integration_constants(new_bmop(knots = m$knots[1],
@@ -362,7 +361,6 @@ bmop_fit.bins<-function(data, density=TRUE, conditional=F,
     KK<-dim(data)[1]*C
     if (density){
       KK<- N*C
-      conditional <- FALSE
     }
     if (conditional){
       C<-integration_constants(new_bmop(knots = m$knots[1],
@@ -409,7 +407,7 @@ bmop_fit.histogram <- bmop_fit.bins
 #' @param ... see \code{bmopPar}
 #' @return a bmop object
 #'@export
-bmop_fit.values<-function(data, density=FALSE, conditional=FALSE,
+bmop_fit.values<-function(data,
                         Min=NULL,
                         Max=NULL,
                         bmop=NULL,
