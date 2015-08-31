@@ -1,5 +1,9 @@
 
-
+removeNA<-function(data){
+  return(data[!apply(X = data,MARGIN = 1,function(d){
+    any(is.na(d))
+  }),])
+}
 
 
 

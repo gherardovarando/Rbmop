@@ -241,6 +241,7 @@ bmop_fit.data.frame<-function(data,density=TRUE, conditional=F,
     }
   }
   data<-as.data.frame(data)
+  data<-removeNA(data)
   if (dim(data)[1]>bmopPar()$autoReduce){
     warning("Data dimension exceded bmopPar()$autoreduce parameter. 
             The data is grouped into bins. Modifying bmopPar()autoReduce 
