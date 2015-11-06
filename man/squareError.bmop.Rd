@@ -4,7 +4,7 @@
 \alias{squareError.bmop}
 \title{Square Error between bmop and true density}
 \usage{
-squareError.bmop(object, dtrue, ...)
+squareError.bmop(object, dtrue, lowerLimit = NULL, upperLimit = NULL, ...)
 }
 \arguments{
 \item{object}{bmop object}

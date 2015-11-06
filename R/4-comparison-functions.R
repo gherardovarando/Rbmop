@@ -12,15 +12,21 @@
 #' bmopPar(mle=TRUE)
 #' bmop2<-bmop_fit(data)
 #' squareError.bmop(bmop1,dtrue=dnorm)
-squareError.bmop<-function(object,dtrue,...){
+squareError.bmop<-function(object,dtrue,lowerLimit=NULL,upperLimit=NULL,...){
   if (!requireNamespace("cubature", quietly = TRUE)){
     warning("cubature package is required to compare bmop object")
     return(NULL)
   }
+  if (is.null(lowerLimit)){
+    lowerLimit=lower.bmop(object)
+  }
+  if (is.null(upperLimit)){
+    upperLimit=upper.bmop(object)
+  }
   f<-as.function(object)
   ff<-function(x){ (f(x)-dtrue(x,...))^2}
-  result<-cubature::adaptIntegrate(f = ff,lowerLimit = lower.bmop(object),
-                         upperLimit = upper.bmop(object))$integral
+  result<-cubature::adaptIntegrate(f = ff,lowerLimit = lowerLimit,
+                         upperLimit = upperLimit)$integral
   return(result)
 } 
 
@@ -80,11 +86,12 @@ KL.bmop<-function(object,dtrue,...){
 #' @return invisible() 
 #' @export
 #' @examples 
-#' data<-rnorm(200)
+#' data<-rnorm(50)
 #' bmop1<-bmop_fit(data)
 #' bmopPar(mle=TRUE)
 #' bmop2<-bmop_fit(data)
-#' comparison_plot(list(bmop1,bmop2),true=dnorm,
+#' bmopPar(mle=FALSE)
+#' comparison_plot(list(bmop1,bmop2),dtrue=dnorm,
 #'                  names.bmop=c("Fast","MLE"))
 comparison_plot<-function(bmop.list,dtrue=NULL,colors=NULL,lwd=3,type="l",
                           type.true="l",col.true="red",

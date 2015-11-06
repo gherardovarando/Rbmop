@@ -4,14 +4,12 @@
 \alias{bmop_fit}
 \title{Estimation of bmop density or conditional density}
 \usage{
-bmop_fit(data, density = TRUE, conditional = FALSE, Min = NULL,
-  Max = NULL, ...)
+bmop_fit(data, conditional = FALSE, Min = NULL, Max = NULL, bmop = NULL,
+  ...)
 }
 \arguments{
 \item{data}{data.frame, matrix, vector or object of class "histogram" or
 "bins"}
-
-\item{density}{logic, if \code{TRUE} a density is learned}
 
 \item{conditional}{logic, if \code{TRUE} a conditional density is learned}
 
@@ -19,12 +17,14 @@ bmop_fit(data, density = TRUE, conditional = FALSE, Min = NULL,
 
 \item{Max}{vector of upper bounds}
 
+\item{bmop}{a bmop object}
+
 \item{...}{see \code{bmopPar}}
 }
 \value{
 a bmop object, a density if \code{conditional=FALSE} or a
 conditional density if \code{conditional=TRUE}. In the latter case the first
-variable of the dataset is considered asa de conditioned one and the rest of
+variable of the dataset is considered as the conditioned one and the rest of
 the variables as the conditioning ones. If the dataset has only one variable
 a normal density is generated discarding the value of \code{conditional}.
 }
@@ -44,6 +44,7 @@ Y<-rnorm(100,mean=X)
 Data<-data.frame(X,Y)
 bmopPar(mle=TRUE)
 bmopC<-bmop_fit(Data,conditional=TRUE)
+bmopPar(mle=FALSE)
 plot(bmopC)
 }
 

@@ -22,6 +22,8 @@ An object of class bmop, a list with elements \code{order},
 }
 \description{
 Constructor of bmop object.
+This fanction provide full control on the creation of a bmop object. It +
+is easier and safer to use the fitting functions like \code{\link{bmop_fit}}.
 }
 \details{
 The function create an object of class \code{bmop}, that is, a list

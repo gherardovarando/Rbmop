@@ -4,14 +4,12 @@
 \alias{bmop_fit.data.frame}
 \title{Estimation of bmop density or conditional density}
 \usage{
-\method{bmop_fit}{data.frame}(data, density = TRUE, conditional = F,
-  Min = NULL, Max = NULL, bmop = NULL, ...)
+\method{bmop_fit}{data.frame}(data, conditional = F, Min = NULL,
+  Max = NULL, bmop = NULL, ...)
 }
 \arguments{
 \item{data}{data.frame, matrix or vector
 the variables must be in the right order (the columns of data)}
-
-\item{density}{logic, if \code{TRUE} a density is learned}
 
 \item{conditional}{logic, if \code{TRUE} a conditional density is learned}
 

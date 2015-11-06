@@ -4,14 +4,12 @@
 \alias{bmop_fit.bins}
 \title{Estimation of bmop density or conditional density}
 \usage{
-\method{bmop_fit}{bins}(data, density = TRUE, conditional = F, Min = NULL,
-  Max = NULL, bmop = NULL, ...)
+\method{bmop_fit}{bins}(data, conditional = F, Min = NULL, Max = NULL,
+  bmop = NULL, ...)
 }
 \arguments{
 \item{data}{\code{histogram} or \code{bins} object
 the variables must be in the right order}
-
-\item{density}{logic, if \code{TRUE} a density is learned}
 
 \item{conditional}{logic, if \code{TRUE} a conditional density is learned}
 

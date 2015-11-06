@@ -21,11 +21,4 @@ generate_knots(data = NULL, N = 5, method = "uniform", Min = NULL,
 \description{
 Generate sequence of knots for bmop objects
 }
-\examples{
-data<-rnorm(200)
-bmopE<-bmop_fit(data)
-bmopS<-search_bmop(data)
-plot(bmopE)
-points(bmopS,type="l",col="red")
-}
 

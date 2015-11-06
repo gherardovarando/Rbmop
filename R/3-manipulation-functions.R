@@ -27,9 +27,10 @@ clean.bmop<-function(object){
 #' the result of integrating over the \code{-MARGIN} other dimensions.
 #' @export
 #' @examples
-#' data<-data.frame(rnorm(100),rnorm(100))
-#' bmop2d<-bmop_fit(data)
-#' bmop1d<-bmop_fit(data[,1])
+#' N<-50 # N small for CRAN 
+#' dataNormal<-data.frame(rnorm(N),rnorm(N))
+#' bmop2d<-bmop_fit(dataNormal)
+#' bmop1d<-bmop_fit(dataNormal[,1])
 #' bmop1dmargin<-marginalize.bmop(bmop2d,MARGIN=1)
 #' comparison_plot(list(bmop1d,bmop1dmargin),true=dnorm,
 #' names.bmop=c("direct est.","marginalized"))

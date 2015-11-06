@@ -27,6 +27,9 @@ All the functions return an invisible list contating the
 generated dataset, the estimated bmops and the true density function.
 See example on how, for example, plot the default kernel density estimation
 on the same dataset.
+If \code{bmopPar(mle=TRUE)} is called before calling an example function
+the \code{bmop_fit} function will be computed with maximum likelihood
+estimation.
 }
 \description{
 Various examples to show the capabilities of bmop estimations.

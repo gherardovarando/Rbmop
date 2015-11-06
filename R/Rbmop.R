@@ -13,8 +13,7 @@
 #' conversion methods \code{\link{as.function.bmop}}.
 #' }
 #' 
-#' @author Gherardo Varando \email{gherardo.varando@@gmail.com}, 
-#' Concha Bielza and Pedro Larranaga
+#' @author Gherardo Varando \email{gherardo.varando@@gmail.com}
 #' @examples
 #'data(trees)
 #'bmop<-bmop_fit(data=trees$Height)
@@ -33,10 +32,11 @@
 #'f<-function(x){return( (dnorm(x,mean=6)+
 #'                        dnorm(x,mean=-3)+
 #'                        dgamma(x,shape=2))/3 )}
-#'D<-c(rnorm(10000,mean=-3),rgamma(10000,shape=2),rnorm(10000,mean=+6))
+#'D<-c(rnorm(1000,mean=-3),rgamma(1000,shape=2),rnorm(1000,mean=+6))
 #'bmopPar(mle=TRUE)
 #'bmop<-bmop_fit(hist(D,nclass.FD))
 #'comparison_plot(bmop,f,ylim=NULL)
+#'bmopPar(mle=FALSE)
 #'
 #'########################
 #'## Using the examples functions

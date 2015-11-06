@@ -15,7 +15,7 @@
 numeric value, the mean of the bmop density
 }
 \description{
-Mean value for a bmop density
+Not very suited for high dimension
 }
 \examples{
 bmop<-bmop_fit(rnorm(100))

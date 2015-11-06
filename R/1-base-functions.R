@@ -8,7 +8,8 @@
 #' New bmop object
 #'
 #' Constructor of bmop object.
-#' 
+#' This fanction provide full control on the creation of a bmop object. It +
+#' is easier and safer to use the fitting functions like \code{\link{bmop_fit}}.
 #' @param knots list of numeric vector, knots of the B-spline basis
 #' @param order vector order of the B-spline for each variable, values will be
 #' recycled eventually
@@ -310,7 +311,8 @@ print.bmop<-function(x,...){
 #' @seealso \code{\link{plot.bmop}}.
 #' @export
 #' @examples 
-#' data<-rnorm(200)
+#' N<-50 # N small for CRAN
+#' data<-rnorm(N)
 #' bmopE<-bmop_fit(data)
 #' bmopS<-search_bmop(data)
 #' plot(bmopE)
@@ -347,12 +349,6 @@ integrate.bmop<-function(object){
 #' @param Min numeric
 #' @param Max numeric
 #' @export
-#' @examples 
-#' data<-rnorm(200)
-#' bmopE<-bmop_fit(data)
-#' bmopS<-search_bmop(data)
-#' plot(bmopE)
-#' points(bmopS,type="l",col="red")
 generate_knots<-function(data=NULL,N=5,method="uniform",Min=NULL,Max=NULL){
     
     D<-length(N)
@@ -517,6 +513,7 @@ upper.bmop<-function(object){
 
 #' Mean value for a bmop density
 #'
+#' Not very suited for high dimension
 #' @param x a bmop object
 #' @param ... for compatibility with \code{\link{mean}}
 #' @return numeric value, the mean of the bmop density
@@ -525,11 +522,20 @@ upper.bmop<-function(object){
 #' bmop<-bmop_fit(rnorm(100))
 #' mean(bmop)
 mean.bmop<-function(x,...){
-  object<-x
-  return(
-    cubature::adaptIntegrate(
-      f = function(x){return(x*evaluate.bmop(x = x,object = object,MIN=0))},
-      lowerLimit = lower.bmop(object),upperLimit = upper.bmop(object))$integral)
+  d<-length(x$order)
+  f<-as.function(x)
+  ff<-function(t){return(t*f(t))}
+  return(sapply(1:d,function(i){
+    g<-function(t){
+      return(ff(t)[i])
+    }
+    return(
+      cubature::adaptIntegrate(
+        f = g,
+        lowerLimit = lower.bmop(x),upperLimit = upper.bmop(x))$integral
+      )
+    })
+  )
 }
 
 
@@ -540,7 +546,7 @@ mean.bmop<-function(x,...){
 #' @param ... compatibility with \code{\link{as.function}}
 #' @export 
 #' @examples
-#' bmop<-bmop_fit(rnorm(200))
+#' bmop<-bmop_fit(rnorm(100))
 #' fun<-as.function(bmop)
 #' fun(0)
 #' fun(3)

@@ -17,7 +17,7 @@
 Convert an bmop object to a function
 }
 \examples{
-bmop<-bmop_fit(rnorm(200))
+bmop<-bmop_fit(rnorm(100))
 fun<-as.function(bmop)
 fun(0)
 fun(3)

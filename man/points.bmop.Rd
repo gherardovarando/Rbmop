@@ -21,7 +21,8 @@ As \code{\link{points}}, this functions provide a way to add the
 plot of a bmop to an existing plot.
 }
 \examples{
-data<-rnorm(200)
+N<-50 # N small for CRAN
+data<-rnorm(N)
 bmopE<-bmop_fit(data)
 bmopS<-search_bmop(data)
 plot(bmopE)
